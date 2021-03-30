@@ -37,7 +37,7 @@ class Cmd():
 
 
 # -------------function to generate assembly commands--------------------------------------------------
-def gen(cmd, statLinks, value)
+def gen(cmd, statLinks, value):
     global codeIndx, CXMAX
     if codeIndx > CXMAX:
         outfile.write("Error, Program is too long")
