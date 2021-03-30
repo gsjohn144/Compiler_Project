@@ -198,33 +198,33 @@ def error(num):
     elif num == 4:
         outfile.write("Const, Var, Procedure must be followed by an identifier.")
     elif num == 5:
-        outfile.write("Semicolon or comman missing")
+        outfile.write("Semicolon or comma missing")
     elif num == 6:
         outfile.write("Incorrect symbol after procedure declaration.")
     elif num == 7:
         outfile.write("Statement expected.")
     elif num == 8:
-        outfile.write("Incorrect symbol after statment part in block.")
+        outfile.write("Incorrect symbol after statement part in block.")
     elif num == 9:
         outfile.write("Period expected.")
     elif num == 10:
         outfile.write("Semicolon between statements is missing.")
     elif num == 11:
-        outfile.write("Undeclard identifier")
+        outfile.write("Undeclared identifier")
     elif num == 12:
         outfile.write("Assignment to a constant or procedure is not allowed.")
     elif num == 13:
         outfile.write("Assignment operator := expected.")
     elif num == 14:
-        outfile.write("call must be followed by an identifier")
+        outfile.write("Call must be followed by an identifier")
     elif num == 15:
         outfile.write("Call of a constant or a variable is meaningless.")
     elif num == 16:
-        outfile.write("Then expected")
+        outfile.write("'Then' expected")
     elif num == 17:
-        outfile.write("Semicolon or end expected. ")
+        outfile.write("Semicolon or 'end' expected. ")
     elif num == 18:
-        outfile.write("DO expected")
+        outfile.write("'Do' expected")
     elif num == 19:
         outfile.write("Incorrect symbol following statement")
     elif num == 20:
