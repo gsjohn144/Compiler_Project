@@ -37,7 +37,7 @@ class Cmd():
 
 
 # -------------function to generate assembly commands--------------------------------------------------
-def gen(cmd, statLinks, value):C:\Users\gsjoh\Downloads\PA3_NN (2)
+def gen(cmd, statLinks, value)
     global codeIndx, CXMAX
     if codeIndx > CXMAX:
         outfile.write("Error, Program is too long")
@@ -497,7 +497,6 @@ def statement(tx, level):
         fixJmp(cx2, codeIndx)
 # place your code for REPEAT here
 
-# ________________________________
 
     elif sym == "FOR":
         getsym()
@@ -511,18 +510,17 @@ def statement(tx, level):
         statement(tx, level)
         gen("JMP", 0, cx1)
         fixJmp(cx2, codeIndx)
-
+# place your code for CASE here
 #    elif sym == "CASE":
 
-# place your code for CASE here
     elif sym == "WRITE":
         getsym()
         cx1 = codeIndx
 
-
 # place your code for WRITE here
-#    elif sym == "WRITELN":
+#    elif sym == "WRITE":
 # place your code for WRITELN here
+#    elif sym == "WRITELN":
 # --------------EXPRESSION--------------------------------------
 def expression(tx, level):
     global sym
