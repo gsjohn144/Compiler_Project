@@ -1,0 +1,14 @@
+VAR X;
+CONST Y = 30;
+
+BEGIN
+  X := 5;
+  WRITE X;
+  WRITELN;
+  WRITE Y;
+  WRITELN;
+  WRITE 10;
+  WRITELN;
+  WRITE 20 / 10;
+  WRITELN;
+END.
