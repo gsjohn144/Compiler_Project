@@ -551,7 +551,6 @@ def statement(tx, level):
     # TODO: place your code for CASE here
     elif sym == "CASE":
         pass
-    # REVIEW: place your code for WRITE here
     elif sym == "WRITE":
         getsym()
         if sym != "ident":
@@ -567,7 +566,6 @@ def statement(tx, level):
             error(25)
         gen("OPR", 0, 14)
         getsym()
-    # TODO: place your code for WRITELN here
     elif sym == "WRITELN":
         gen("OPR", 0, 15)
         getsym()
