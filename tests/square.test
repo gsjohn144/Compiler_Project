@@ -10,6 +10,8 @@ BEGIN
   WHILE x <= 10 DO
   BEGIN
     CALL square;
-    x := x + 1
+    x := x + 1;
+    WRITE squ;
+    WRITELN;
   END
 END.
