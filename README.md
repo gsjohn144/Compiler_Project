@@ -48,7 +48,7 @@ The following is a table of all error codes used within the compiler at present.
 
 ## Op Codes
 | Op  | Name | l  | a  | Description |
-| :-: | :--: | -: | -: | :---------- |
+| :-: | :--- | -: | -: | :---------- |
 | LIT | Literal | 0 | value | Pushes a literal value to the stack |
 | LOD | Load | level | offset | Loads a variable at depth level and index offset |
 | STO | Store | level | offset | Stores a variable at depth level and index offset |
