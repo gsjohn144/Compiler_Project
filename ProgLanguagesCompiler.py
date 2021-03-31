@@ -554,18 +554,19 @@ def statement(tx, level):
     elif sym == "WRITE":
         getsym()
         if sym != "ident":
-            error(14)
-        i = position(tx, id)
-        if i == 0:
-            error(11)
-        if table[i].kind == "const":
-            gen("LIT", 0, table[i].value)
-        elif table[i].kind == "variable":
-            gen("LOD", level - table[i].level, table[i].adr)
+            term(tx, level)
         else:
-            error(25)
+            i = position(tx, id)
+            if i == 0:
+                error(11)
+            if table[i].kind == "const":
+                gen("LIT", 0, table[i].value)
+            elif table[i].kind == "variable":
+                gen("LOD", level - table[i].level, table[i].adr)
+            else:
+                error(25)
+            getsym()
         gen("OPR", 0, 14)
-        getsym()
     elif sym == "WRITELN":
         gen("OPR", 0, 15)
         getsym()
