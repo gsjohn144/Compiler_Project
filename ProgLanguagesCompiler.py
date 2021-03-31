@@ -81,14 +81,13 @@ def fixJmp(cx, jmpTo):
 # --------------Function to print p-Code for a given block-----------------------------
 def printCode():
     global codeIndx, codeIndx0
-    outfile.write("\n")
     for i in range(codeIndx0, codeIndx):
         outfile.write(
             "{line}\t{cmd}\t{stat}\t{val}\n".format(
-                 line=code[i].line
-                ,cmd=code[i].cmd
-                ,stat=code[i].statLinks
-                ,val=code[i].value
+                 line = code[i].line
+                ,cmd = code[i].cmd
+                ,stat = code[i].statLinks
+                ,val = code[i].value
             )
         )
     prevIndx = codeIndx
@@ -182,7 +181,7 @@ def Interpret():
                 else:
                     stack[top] = 0
             elif instr.value == 14:  # write/print stack[top]
-                outfile.write(stack[top] + "\n")
+                outfile.write(str(stack[top]))
                 top -= 1
             elif instr.value == 15:  # write/print a newline
                 # Worth noting in the original this was just "print",
@@ -251,7 +250,7 @@ def error(num):
     elif num == 13:
         outfile.write("Assignment operator := expected\n")
     elif num == 14:
-        outfile.write("Call must be followed by an identifier\n")
+        outfile.write("Identifier expected\n")
     elif num == 15:
         outfile.write("Call of a constant or a variable is meaningless\n")
     elif num == 16:
@@ -422,7 +421,7 @@ def vardeclaration(tx, level, dx):
 # -------------BLOCK-------------------------------------------------------------
 def block(tableIndex, level):
     global sym, id, codeIndx, codeIndx0
-    tx = [1]
+    tx = [None]
     tx[0] = tableIndex
     tx0 = tableIndex
     dx = 3
@@ -555,10 +554,23 @@ def statement(tx, level):
     # REVIEW: place your code for WRITE here
     elif sym == "WRITE":
         getsym()
-        cx1 = codeIndx
+        if sym != "ident":
+            error(14)
+        i = position(tx, id)
+        if i == 0:
+            error(11)
+        if table[i].kind == "const":
+            gen("LIT", 0, table[i].value)
+        elif table[i].kind == "variable":
+            gen("LOD", level - table[i].level, table[i].adr)
+        else:
+            error(25)
+        gen("OPR", 0, 14)
+        getsym()
     # TODO: place your code for WRITELN here
     elif sym == "WRITELN":
-        pass
+        gen("OPR", 0, 15)
+        getsym()
 # --------------EXPRESSION--------------------------------------
 def expression(tx, level):
     global sym
@@ -710,6 +722,11 @@ prevIndx = 0
 
 getsym()  # get first symbol
 block(0, 0)  # call block initializing with a table index of zero
+# Note: To ensure all lines from 1 to program end get printed:
+# Comment out line ~495 (the printCode call at the end of def block
+# and uncomment the below:
+# codeIndx0 = 1
+# printCode()
 if sym != "period":  # period expected after block is completed
     error(9)
 print("\n") # Original code was `print`
