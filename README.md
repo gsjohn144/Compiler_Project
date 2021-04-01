@@ -34,9 +34,9 @@ The following is a table of all error codes used within the compiler at present.
 | 13         | Assignment operator := expected |
 | 14         | Identifier expected |
 | 15         | Call of a constant or a variable is meaningless |
-| 16         | 'Then' expected |
-| 17         | Semicolon or 'end' expected |
-| 18         | 'Do' expected |
+| 16         | 'THEN' expected |
+| 17         | Semicolon or 'END' expected |
+| 18         | 'DO' expected |
 | 19         | Incorrect symbol following statement |
 | 20         | Relational operator expected |
 | 21         | Expression must not contain a procedure identifier |
@@ -45,6 +45,7 @@ The following is a table of all error codes used within the compiler at present.
 | 24         | An expression cannot begin with this symbol |
 | 25         | Constant or Number is expected |
 | 26         | This number is too large |
+| 27         | 'UNTIL' expected |
 
 ## Op Codes
 | Op  | Name | l  | a  | Description |
