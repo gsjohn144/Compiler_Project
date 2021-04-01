@@ -498,7 +498,7 @@ def statement(tx, level):
             error(15)
         gen("CAL", level - table[i].level, table[i].adr)
         getsym()
-    elif sym == "IF":
+    elif sym == "IF": #IF/ELSE
         getsym()
         condition(tx, level)
         cx1 = codeIndx
@@ -508,9 +508,14 @@ def statement(tx, level):
         getsym()
         statement(tx, level)
         fixJmp(cx1, codeIndx)
-    # TODO: place your code for ELSE here
-    elif sym == "ELSE":
-        getsym()
+        # ELSE
+        if sym == "ELSE":
+            cx2 = codeIndx
+            gen("JMP", 0, 0) # Jump past else when coming out of if
+            fixJmp(cx1, codeIndx) # Jump into else when if fails
+            getsym()
+            statement(tx, level)
+            fixJmp(cx2, codeIndx)
     elif sym == "BEGIN":
         while True:
             getsym()
