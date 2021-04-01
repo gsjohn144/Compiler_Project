@@ -275,6 +275,8 @@ def error(num):
         outfile.write("Constant or Number is expected\n")
     elif num == 26:
         outfile.write("This number is too large\n")
+    elif num == 27:
+        outfile.write("'UNTIL' expected\n")
     exit(0)
 
 
@@ -539,7 +541,15 @@ def statement(tx, level):
         fixJmp(cx2, codeIndx)
     # TODO: place your code for REPEAT here
     elif sym == "REPEAT":
-        pass
+        getsym()
+        cx1 = codeIndx
+        statement(tx, level)
+        if sym != "UNTIL":
+            error(27)
+        getsym()
+        condition(tx, level)
+        gen("JPC", 0, cx1)
+        getsym()
     # REVIEW: place your code for FOR here
     elif sym == "FOR":
         getsym()
