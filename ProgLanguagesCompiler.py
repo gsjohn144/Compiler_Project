@@ -539,7 +539,6 @@ def statement(tx, level):
         statement(tx, level)
         gen("JMP", 0, cx1)
         fixJmp(cx2, codeIndx)
-    # TODO: place your code for REPEAT here
     elif sym == "REPEAT":
         getsym()
         cx1 = codeIndx
