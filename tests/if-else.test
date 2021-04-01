@@ -1,0 +1,16 @@
+CONST X = 0;
+BEGIN
+  IF X > 0 THEN
+    BEGIN
+      WRITE 1;
+      WRITELN;
+    END
+  ELSE
+    BEGIN
+      WRITE 0;
+      WRITELN;
+    END
+  ;
+  WRITE 10;
+  WRITELN;
+END.
