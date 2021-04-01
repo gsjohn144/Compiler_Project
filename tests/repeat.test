@@ -1,0 +1,12 @@
+VAR I;
+
+BEGIN
+  I := 0;
+  REPEAT
+    BEGIN
+      WRITE I;
+      WRITELN;
+      I := I + 1;
+    END
+  UNTIL I = 10;
+END.
