@@ -114,6 +114,23 @@ def Interpret():
     while True:
         instr = code[pos]
         pos += 1
+        # Debug: Print stack frames
+        '''
+        print("{li}\t{c}\t{l}\t{a}".format(li=instr.line, c=instr.cmd, l=instr.statLinks, a=instr.value))
+        print("Base: ", base, ", Top: ", top)
+        if top >= base:
+            print("Stack: ")
+        for i in range(1, top + 1):
+            print(i, ": ", stack[i])
+        print()
+        '''
+        # Debug: Print identifier table
+        '''
+        print("Identifiers:")
+        for t in table:
+            print("{}\t{}\t{}\t{}\t{}".format(t.name, t.kind, t.level, t.adr, t.value))
+        print()
+        '''
         #       LIT COMMAND
         if instr.cmd == "LIT":
             top += 1
@@ -213,6 +230,9 @@ def Interpret():
             if stack[top] == instr.statLinks:
                 pos = instr.value
             top -= 1
+        elif instr.cmd == "CPY":
+            top += 1
+            stack[top] = stack[top - 1]
         if pos == 0:
             break
     outfile.write("End PL/0\n")
@@ -224,11 +244,11 @@ def error(num):
     errorFlag = 1
     print("\n")
     if num == 1:
-        outfile.write("Use = instead of :=\n")
+        outfile.write("Use '=' instead of ':='\n")
     elif num == 2:
-        outfile.write("= must be followed by a number\n")
+        outfile.write("'=' must be followed by a number\n")
     elif num == 3:
-        outfile.write("Identifier must be followed by =\n")
+        outfile.write("Identifier must be followed by '='\n")
     elif num == 4:
         outfile.write("Const, Var, Procedure must be followed by an identifier\n")
     elif num == 5:
@@ -248,17 +268,17 @@ def error(num):
     elif num == 12:
         outfile.write("Assignment to a constant or procedure is not allowed\n")
     elif num == 13:
-        outfile.write("Assignment operator := expected\n")
+        outfile.write("Assignment operator ':=' expected\n")
     elif num == 14:
         outfile.write("Identifier expected\n")
     elif num == 15:
         outfile.write("Call of a constant or a variable is meaningless\n")
     elif num == 16:
-        outfile.write("'Then' expected\n")
+        outfile.write("'THEN' expected\n")
     elif num == 17:
-        outfile.write("Semicolon or 'end' expected\n")
+        outfile.write("Semicolon or 'END' expected\n")
     elif num == 18:
-        outfile.write("'Do' expected\n")
+        outfile.write("'DO' expected\n")
     elif num == 19:
         outfile.write("Incorrect symbol following statement\n")
     elif num == 20:
@@ -266,7 +286,7 @@ def error(num):
     elif num == 21:
         outfile.write("Expression must not contain a procedure identifier\n")
     elif num == 22:
-        outfile.write( "Right parenthesis missing\n")
+        outfile.write("Right parenthesis missing\n")
     elif num == 23:
         outfile.write("The preceding factor cannot be followed by this symbol\n")
     elif num == 24:
@@ -277,6 +297,12 @@ def error(num):
         outfile.write("This number is too large\n")
     elif num == 27:
         outfile.write("'UNTIL' expected\n")
+    elif num == 28:
+        outfile.write("'OF' expected\n")
+    elif num == 29:
+        outfile.write("':' expected\n")
+    elif num == 30:
+        outfile.write("'CEND' expected\n")
     exit(0)
 
 
@@ -562,9 +588,51 @@ def statement(tx, level):
         statement(tx, level)
         gen("JMP", 0, cx1)
         fixJmp(cx2, codeIndx)
-    # TODO: place your code for CASE here
     elif sym == "CASE":
-        pass
+        getsym()
+        if sym != "ident":
+            term(tx, level)
+        else:
+            i = position(tx, id)
+            if i == 0:
+                error(11)
+            if table[i].kind == "const":
+                gen("LIT", 0, table[i].value)
+            elif table[i].kind == "variable":
+                gen("LOD", table[i].level, table[i].adr)
+            else:
+                error(25)
+        getsym()
+
+        # enter case body
+        getsym() # expression 1
+        cx1 = None
+        jump0 = None # Address of JMP out of case 1
+        while sym != "CEND" and sym != "ELSE":
+            # Push control value to stack
+            gen("CPY", 0, 0)
+            term(tx, level)
+            gen("OPR", 0, 8)
+            cx1 = codeIndx
+            gen("JPC", 0, 0) # Used to jump to next case
+            if sym != "colon":
+                error(29)
+            getsym()
+            statement(tx, level)
+            if jump0 is None:
+                jump0 = codeIndx
+            gen("JMP", 0, jump0) # Jumps outside of case block
+            fixJmp(cx1, codeIndx) # Jump to next case
+            getsym() # next expression or END
+        # ELSE
+        if sym == "ELSE":
+            # Don't need any jumps, just need to put this before all the case jumps
+            getsym()
+            statement(tx, level)
+        if sym != "CEND":
+            error(30)
+        getsym()
+        fixJmp(jump0, codeIndx)
     elif sym == "WRITE":
         getsym()
         if sym != "ident":
