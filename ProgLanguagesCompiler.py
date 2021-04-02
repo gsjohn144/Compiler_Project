@@ -303,6 +303,10 @@ def error(num):
         outfile.write("':' expected\n")
     elif num == 30:
         outfile.write("'CEND' expected\n")
+    elif num == 31:
+        outfile.write("'TO' or 'DOWNTO' expected\n")
+    else:
+        outfile.write("An unknown error occured\n")
     exit(0)
 
 
@@ -578,20 +582,66 @@ def statement(tx, level):
     # REVIEW: place your code for FOR here
     elif sym == "FOR":
         getsym()
-        cx1 = codeIndx
-        condition(tx, level)
-        cx2 = codeIndx
-        gen("JPC", 0, 0)
-        if sym != "DO":
-            error(18)
+        if sym != "ident":
+            error(14)
+        i = position(tx, id)
+        if i == 0:
+            error(11)
+        if table[i].kind != "variable":
+            error(32)
         getsym()
-        statement(tx, level)
-        gen("JMP", 0, cx1)
-        fixJmp(cx2, codeIndx)
+        if sym != "becomes":
+            error(13)
+        getsym()
+        expression(tx, level)
+        gen("STO", table[i].level, table[i].adr) # Initialize loop control var
+        cx1 = None
+        cx2 = None
+        if sym == "TO":
+            getsym()
+            expression(tx, level)
+            cx2 = codeIndx
+            gen("CPY", 0, 0) # Copy loop boundary
+            gen("LOD", table[i].level, table[i].adr) # Load loop control var
+            gen("OPR", 0, 11) # boundary >= control
+            cx1 = codeIndx
+            gen("JPC", 0, 0)
+            if sym != "DO":
+                print(sym)
+                error(18)
+            getsym()
+            statement(tx, level) # loop body
+            # increment loop control variable
+            gen("LOD", table[i].level, table[i].adr)
+            gen("LIT", 0, 1)
+            gen("OPR", 0, 2)
+            gen("STO", table[i].level, table[i].adr)
+        elif sym == "DOWNTO":
+            getsym()
+            expression(tx, level)
+            cx2 = codeIndx
+            gen("CPY", 0, 0) # Copy loop boundary
+            gen("LOD", table[i].level, table[i].adr) # Load loop control var
+            gen("OPR", 0, 13) # boundary <= control
+            cx1 = codeIndx
+            gen("JPC", 0, 0)
+            if sym != "DO":
+                error(18)
+            getsym()
+            statement(tx, level) # loop body
+            # decrement loop control variable
+            gen("LOD", table[i].level, table[i].adr)
+            gen("LIT", 0, 1)
+            gen("OPR", 0, 3)
+            gen("STO", table[i].level, table[i].adr)
+        else:
+            error(31)
+        gen("JMP", 0, cx2) # loop
+        fixJmp(cx1, codeIndx)
     elif sym == "CASE":
         getsym()
         if sym != "ident":
-            term(tx, level)
+            expression(tx, level)
         else:
             i = position(tx, id)
             if i == 0:
@@ -611,7 +661,7 @@ def statement(tx, level):
         while sym != "CEND" and sym != "ELSE":
             # Push control value to stack
             gen("CPY", 0, 0)
-            term(tx, level)
+            expression(tx, level)
             gen("OPR", 0, 8)
             cx1 = codeIndx
             gen("JPC", 0, 0) # Used to jump to next case
@@ -636,7 +686,7 @@ def statement(tx, level):
     elif sym == "WRITE":
         getsym()
         if sym != "ident":
-            term(tx, level)
+            expression(tx, level)
         else:
             i = position(tx, id)
             if i == 0:
