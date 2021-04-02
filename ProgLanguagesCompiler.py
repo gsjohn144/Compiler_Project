@@ -579,7 +579,6 @@ def statement(tx, level):
         condition(tx, level)
         gen("JPC", 0, cx1)
         getsym()
-    # REVIEW: place your code for FOR here
     elif sym == "FOR":
         getsym()
         if sym != "ident":
