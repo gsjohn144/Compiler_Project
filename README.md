@@ -49,6 +49,7 @@ The following is a table of all error codes used within the compiler at present.
 | 28         | 'OF' expected |
 | 29         | ':' expected |
 | 30         | 'CEND' expected |
+| 31         | 'TO' or 'DOWNTO' expected |
 
 ## Op Codes
 | Op  | Name | l  | a  | Description |
