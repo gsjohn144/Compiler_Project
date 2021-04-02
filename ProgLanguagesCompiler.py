@@ -115,15 +115,15 @@ def Interpret():
         instr = code[pos]
         pos += 1
         # Debug: Print stack frames
-        '''
+        #'''
         print("{li}\t{c}\t{l}\t{a}".format(li=instr.line, c=instr.cmd, l=instr.statLinks, a=instr.value))
         print("Base: ", base, ", Top: ", top)
         if top >= base:
             print("Stack: ")
-        for i in range(1, top + 1):
+        for i in range(1, min(top + 1, 10)):
             print(i, ": ", stack[i])
         print()
-        '''
+        #'''
         # Debug: Print identifier table
         '''
         print("Identifiers:")
@@ -134,6 +134,9 @@ def Interpret():
         #       LIT COMMAND
         if instr.cmd == "LIT":
             top += 1
+            if top >= STACKSIZE:
+                print("Line: ", pos)
+                error(34)
             stack[top] = int(instr.value)
         #       OPR COMMAND
         elif instr.cmd == "OPR":
@@ -309,6 +312,8 @@ def error(num):
         outfile.write("Variable expected\n")
     elif num == 33:
         outfile.write("'(' expected\n")
+    elif num == 34:
+        outfile.write("Stack overflow\n")
     else:
         outfile.write("An unknown error occured\n")
     exit(0)
@@ -585,7 +590,6 @@ def statement(tx, level):
         getsym()
         condition(tx, level)
         gen("JPC", 0, cx1)
-        getsym()
     elif sym == "FOR":
         getsym()
         if sym != "ident":
@@ -646,20 +650,9 @@ def statement(tx, level):
         fixJmp(cx1, codeIndx)
     elif sym == "CASE":
         getsym()
-        if sym != "ident":
-            expression(tx, level)
-        else:
-            i = position(tx, id)
-            if i == 0:
-                error(11)
-            if table[i].kind == "const":
-                gen("LIT", 0, table[i].value)
-            elif table[i].kind == "variable":
-                gen("LOD", table[i].level, table[i].adr)
-            else:
-                error(25)
-        getsym()
-
+        expression(tx, level)
+        if sym != "OF":
+            error(28)
         # enter case body
         getsym() # expression 1
         cx1 = None
@@ -672,6 +665,7 @@ def statement(tx, level):
             cx1 = codeIndx
             gen("JPC", 0, 0) # Used to jump to next case
             if sym != "colon":
+                print("Error, Symbol: ", sym)
                 error(29)
             getsym()
             statement(tx, level)
@@ -691,21 +685,31 @@ def statement(tx, level):
         fixJmp(jump0, codeIndx)
     elif sym == "WRITE":
         getsym()
-        if sym != "ident":
-            expression(tx, level)
-        else:
-            i = position(tx, id)
-            if i == 0:
-                error(11)
-            if table[i].kind == "const":
-                gen("LIT", 0, table[i].value)
-            elif table[i].kind == "variable":
-                gen("LOD", level - table[i].level, table[i].adr)
-            else:
-                error(25)
-            getsym()
+        if sym != ssym["("]:
+            error(33)
+        getsym()
+        expression(tx, level)
         gen("OPR", 0, 14)
+        while sym == ssym[","]:
+            getsym()
+            expression(tx, level)
+            gen("OPR", 0, 14)
+        if sym != ssym[")"]:
+            error(22)
+        getsym()
     elif sym == "WRITELN":
+        getsym()
+        if sym != ssym["("]:
+            error(33)
+        getsym()
+        expression(tx, level)
+        gen("OPR", 0, 14)
+        while sym == ssym[","]:
+            getsym()
+            expression(tx, level)
+            gen("OPR", 0, 14)
+        if sym != ssym[")"]:
+            error(22)
         gen("OPR", 0, 15)
         getsym()
 # --------------EXPRESSION--------------------------------------
