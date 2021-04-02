@@ -52,6 +52,7 @@ The following is a table of all error codes used within the compiler at present.
 | 31         | 'TO' or 'DOWNTO' expected |
 | 32         | Variable expected |
 | 33         | '(' expected |
+| 34         | Stack overflow |
 
 ## Op Codes
 | Op  | Name | l  | a  | Description |
