@@ -573,6 +573,9 @@ def statement(tx, level):
         getsym()
         cx1 = codeIndx
         statement(tx, level)
+        while sym == "semicolon":
+            getsym()
+            statement(tx, level)
         if sym != "UNTIL":
             error(27)
         getsym()
