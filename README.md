@@ -50,6 +50,7 @@ The following is a table of all error codes used within the compiler at present.
 | 29         | ':' expected |
 | 30         | 'CEND' expected |
 | 31         | 'TO' or 'DOWNTO' expected |
+| 32         | Variable expected |
 
 ## Op Codes
 | Op  | Name | l  | a  | Description |
