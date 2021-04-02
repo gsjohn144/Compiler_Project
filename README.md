@@ -59,6 +59,7 @@ The following is a table of all error codes used within the compiler at present.
 | INT | Increment t | 0 | value | Increments the top pointer for the stack by value |
 | JMP | Jump | 0 | address | Sets the program counter to address |
 | JPC | Conditional Jump | 0 | address | Sets the program counter to address only if stack[top] is 0 |
+| CPY | Copy | 0 | 0 | Pushes a copy of the top of the stack to the top of the stack |
 | OPR | Operation - End | 0 | 0 | Signifies the end of a block |
 | OPR | Operation - Unary Minus | 0 | 1 | Performs negation of one value |
 | OPR | Operation - Addition | 0 | 2 | Performs addition of two values |
