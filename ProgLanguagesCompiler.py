@@ -305,6 +305,10 @@ def error(num):
         outfile.write("'CEND' expected\n")
     elif num == 31:
         outfile.write("'TO' or 'DOWNTO' expected\n")
+    elif num == 32:
+        outfile.write("Variable expected\n")
+    elif num == 33:
+        outfile.write("'(' expected\n")
     else:
         outfile.write("An unknown error occured\n")
     exit(0)
