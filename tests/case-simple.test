@@ -2,8 +2,8 @@ CONST X = 1;
 
 BEGIN
   CASE X OF
-    1: WRITE 5;
-    2: WRITE 1;
+    1: WRITELN(5);
+    2: WRITELN(1);
   CEND;
-  WRITELN;
+  WRITELN(20);
 END.

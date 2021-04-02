@@ -2,11 +2,11 @@ CONST X = 1;
 
 BEGIN
   IF X = 0 THEN
-    WRITE 0
+    WRITELN(0)
   ELSE IF X = 1 THEN
-    WRITE 1
+    WRITELN(1)
   ELSE
-    WRITE X
+    WRITELN(X)
   ;
-  WRITELN;
+  WRITELN(20);
 END.

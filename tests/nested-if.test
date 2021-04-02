@@ -3,37 +3,22 @@ CONST TEMP = 70, HUMIDITY = 40;
 BEGIN
   IF TEMP > 80 THEN
     BEGIN
-      WRITE TEMP;
-      WRITELN;
+      WRITELN(TEMP);
       IF HUMIDITY > 50 THEN
-        BEGIN
-          WRITE HUMIDITY;
-          WRITELN;
-        END
+        WRITELN(HUMIDITY)
       ELSE
-        BEGIN
-          WRITE 0;
-          WRITELN;
-        END
+        WRITELN(0)
       ;
     END
   ELSE
     BEGIN
-      WRITE 0;
-      WRITELN;
+      WRITELN(0);
       IF HUMIDITY > 50 THEN
-        BEGIN
-          WRITE HUMIDITY;
-          WRITELN;
-        END
+        WRITELN(HUMIDITY)
       ELSE
-        BEGIN
-          WRITE 0;
-          WRITELN;
-        END
+        WRITELN(0)
       ;
     END
   ;
-  WRITE 100;
-  WRITELN;
+  WRITELN(100);
 END.

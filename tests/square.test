@@ -11,7 +11,6 @@ BEGIN
   BEGIN
     CALL square;
     x := x + 1;
-    WRITE squ;
-    WRITELN;
+    WRITELN(squ);
   END
 END.

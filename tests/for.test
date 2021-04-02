@@ -2,13 +2,9 @@ VAR i;
 
 BEGIN
   FOR i := 0 TO 5 DO
-  BEGIN
-    WRITE i;
-    WRITELN;
-  END;
+    WRITELN(i)
+  ;
   FOR i := 15 DOWNTO 10 DO
-  BEGIN
-    WRITE i;
-    WRITELN;
-  END;
+    WRITELN(i)
+  ;
 END.
