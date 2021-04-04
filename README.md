@@ -10,9 +10,18 @@
 ## Languages
 
 We are to add additional features to a partially built compiler for the following languages:
-* Python
-* Groovy
-* Lua
+[x] Python
+[] Groovy
+[] Lua
+
+For the first assignment, we must implement syntax analysis only (anything more than this is *not* required) for the following statements:
+* CASE CEND
+* IF THEN ELSE END
+* REPEAT UNTIL
+* WRITE()
+* WRITELN()
+
+A detailed grammar for all of which can be found in Canvas under the assignment page
 
 ## Error Codes
 Note: Only error codes 1-26 were included in the original compiler. Minor changes have been made to these as well to fix typos, be internally consistent, be more readable, etc.
