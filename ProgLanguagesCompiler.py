@@ -233,9 +233,13 @@ def Interpret():
             if stack[top] == instr.statLinks:
                 pos = instr.value
             top -= 1
+        # Added: Copy command
         elif instr.cmd == "CPY":
             top += 1
             stack[top] = stack[top - 1]
+        # Added: Decrement command
+        elif instr.cmd == "DEC":
+            top = top - instr.value
         if pos == 0:
             break
     outfile.write("End PL/0\n")
