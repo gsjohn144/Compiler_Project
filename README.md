@@ -15,6 +15,7 @@ We are to add additional features to a partially built compiler for the followin
 * Lua
 
 ## Error Codes
+Note: Only error codes 1-26 were included in the original compiler. Minor changes have been made to these as well to fix typos, be internally consistent, be more readable, etc.
 
 The following is a table of all error codes used within the compiler at present. Use these as appropriate.
 | Error Code | Error Message |
