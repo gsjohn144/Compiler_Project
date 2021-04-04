@@ -62,6 +62,7 @@ The following is a table of all error codes used within the compiler at present.
 | STO | Store | level | offset | Stores a variable at depth level and index offset |
 | CAL | Call | level | offset | Calls a procedure at depth level and index offset |
 | INT | Increment t | 0 | value | Increments the top pointer for the stack by value |
+| DEC | Decrement t | 0 | value | Decrements the top pointer for the stack by value |
 | JMP | Jump | 0 | address | Sets the program counter to address |
 | JPC | Conditional Jump | 0 | address | Sets the program counter to address only if stack[top] is 0 |
 | CPY | Copy | 0 | 0 | Pushes a copy of the top of the stack to the top of the stack |
@@ -81,3 +82,5 @@ The following is a table of all error codes used within the compiler at present.
 | OPR | Operation - Less than or Equal | 0 | 13 | Tests if one value is no greater than the other |
 | OPR | Operation - Write | 0 | 14 | Writes stack[top] to the out |
 | OPR | Operation - Write Line | 0 | 15 | Writes a new line character to the out |
+
+Note: the DEC and CPY commands were not included in the original instruction set and were added to facilitate extended functionality.
