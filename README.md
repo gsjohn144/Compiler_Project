@@ -11,8 +11,8 @@
 
 We are to add additional features to a partially built compiler for the following languages:
 - [x] Python
-- [ ] Groovy
-- [ ] Lua
+- [ ] Java
+- [ ] C++
 
 For the first assignment, we must implement syntax analysis only (anything more than this is *not* required) for the following statements:
 * CASE CEND
