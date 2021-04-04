@@ -55,6 +55,8 @@ The following is a table of all error codes used within the compiler at present.
 | 34         | Stack overflow |
 
 ## Op Codes
+Note: the DEC and CPY commands were not included in the original instruction set and were added to facilitate extended functionality.
+
 | Op  | Name | l  | a  | Description |
 | :-: | :--- | -: | -: | :---------- |
 | LIT | Literal | 0 | value | Pushes a literal value to the stack |
@@ -82,5 +84,3 @@ The following is a table of all error codes used within the compiler at present.
 | OPR | Operation - Less than or Equal | 0 | 13 | Tests if one value is no greater than the other |
 | OPR | Operation - Write | 0 | 14 | Writes stack[top] to the out |
 | OPR | Operation - Write Line | 0 | 15 | Writes a new line character to the out |
-
-Note: the DEC and CPY commands were not included in the original instruction set and were added to facilitate extended functionality.
