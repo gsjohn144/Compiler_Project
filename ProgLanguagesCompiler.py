@@ -115,7 +115,7 @@ def Interpret():
         instr = code[pos]
         pos += 1
         # Debug: Print stack frames
-        #'''
+        '''
         print("{li}\t{c}\t{l}\t{a}".format(li=instr.line, c=instr.cmd, l=instr.statLinks, a=instr.value))
         print("Base: ", base, ", Top: ", top)
         if top >= base:
@@ -123,7 +123,7 @@ def Interpret():
         for i in range(1, min(top + 1, 10)):
             print(i, ": ", stack[i])
         print()
-        #'''
+        '''
         # Debug: Print identifier table
         '''
         print("Identifiers:")
@@ -612,6 +612,7 @@ def statement(tx, level):
         cx1 = None
         cx2 = None
         if sym == "TO":
+            #gen("OPR", level, 7) # NOP, debug
             getsym()
             expression(tx, level)
             cx2 = codeIndx
@@ -652,6 +653,7 @@ def statement(tx, level):
             error(31)
         gen("JMP", 0, cx2) # loop
         fixJmp(cx1, codeIndx)
+        gen("DEC", 0, 1) # Remove loop control var from stack
     elif sym == "CASE":
         getsym()
         expression(tx, level)
