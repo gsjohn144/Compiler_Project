@@ -1,0 +1,9 @@
+CONST X = 0;
+BEGIN
+  IF X > 0 THEN
+    WRITELN(1)
+  ELSE
+    WRITELN(0)
+  ;
+  WRITELN(10);
+END.

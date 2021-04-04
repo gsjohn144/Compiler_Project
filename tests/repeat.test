@@ -1,0 +1,9 @@
+VAR I;
+
+BEGIN
+  I := 0;
+  REPEAT
+    WRITELN(I);
+    I := I + 1;
+  UNTIL I = 10;
+END.

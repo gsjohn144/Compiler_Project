@@ -1,0 +1,12 @@
+CONST X = 1;
+
+BEGIN
+  IF X = 0 THEN
+    WRITELN(0)
+  ELSE IF X = 1 THEN
+    WRITELN(1)
+  ELSE
+    WRITELN(X)
+  ;
+  WRITELN(20);
+END.

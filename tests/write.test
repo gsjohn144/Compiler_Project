@@ -1,0 +1,11 @@
+VAR X;
+CONST Y = 30;
+
+BEGIN
+  X := 5;
+  WRITELN(X);
+  WRITELN(Y);
+  WRITELN(X, Y);
+  WRITE(10);
+  WRITELN(10, 20 / 10);
+END.

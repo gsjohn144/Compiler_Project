@@ -1,0 +1,26 @@
+CONST CHAR = 15;
+VAR BOOL;
+
+PROCEDURE ISDIGIT;
+BEGIN
+  BOOL := 0;
+  CASE CHAR OF
+    0: BOOL := 1;
+    1: BOOL := 1;
+    2: BOOL := 1;
+    3: BOOL := 1;
+    4: BOOL := 1;
+    5: BOOL := 1;
+    6: BOOL := 1;
+    7: BOOL := 1;
+    8: BOOL := 1;
+    9: BOOL := 1;
+  ELSE
+    WRITELN(CHAR)
+  CEND;
+END;
+
+BEGIN
+  CALL ISDIGIT;
+  WRITELN(BOOL);
+END.

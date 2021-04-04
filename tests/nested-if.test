@@ -1,0 +1,24 @@
+CONST TEMP = 70, HUMIDITY = 40;
+
+BEGIN
+  IF TEMP > 80 THEN
+    BEGIN
+      WRITELN(TEMP);
+      IF HUMIDITY > 50 THEN
+        WRITELN(HUMIDITY)
+      ELSE
+        WRITELN(0)
+      ;
+    END
+  ELSE
+    BEGIN
+      WRITELN(0);
+      IF HUMIDITY > 50 THEN
+        WRITELN(HUMIDITY)
+      ELSE
+        WRITELN(0)
+      ;
+    END
+  ;
+  WRITELN(100);
+END.

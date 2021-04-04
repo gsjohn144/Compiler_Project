@@ -1,0 +1,7 @@
+CONST X = 5, Y = 3;
+VAR I, J;
+
+FOR I := 0 TO X DO
+  FOR J := 0 TO Y DO
+    WRITELN(I, J)
+.

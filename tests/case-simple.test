@@ -1,0 +1,9 @@
+CONST X = 1;
+
+BEGIN
+  CASE X OF
+    1: WRITELN(5);
+    2: WRITELN(1);
+  CEND;
+  WRITELN(20);
+END.
