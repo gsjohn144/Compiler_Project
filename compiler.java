@@ -1,8 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class compiler
-{
+public class compiler {
 		static private final int TRUE = 1;
 		static private final int FALSE = 0;
 		static private final int NORW = 11;
@@ -11,128 +10,122 @@ public class compiler
 		static private final int AL = 20;
 		static private final int AMAX = 2047;
 
-		public static enum OBJECTS
-		{
+		public static enum OBJECTS {
 			Constant,
 			Variable,
 			Procedure,
 			None
 		}
 
-		public static enum SYMBOL
-		{
-			BEGINSYM,
-			CALLSYM,
-			CASESYM, //added case
-			CENDSYM, //added cend
-			CONSTSYM,
-			DOSYM,
-			DOWNTO, //added downto
-			ELSESYM, //added else
-			ENDSYM,
-			FORSYM, //added for
-			IFSYM,
-			ODDSYM,
-			OFSYM, //added of
-			PROCSYM,
-			REPEAT, //added repeat
-			THENSYM,
-			TOSYM,  //added tosym
-			UNTIL, //added until
-			VARSYM,
-			WHILESYM,  
-			WRITESYM,  //added write
-			WRITELNSYM, //added writeln
-			NUL,
-			IDENT,
-			NUMBER,
-			PLUS,
-			MINUS,
-			TIMES,
-			SLASH,
-			EQL, //equal
-			NEQ, //not equal
-			LSS, //less than
-			LEQ, //less than or equal to
-			GTR, //greater than
-			GEQ, //greater than or equal to
-			LPAREN, //left parenthesis
-			RPAREN, //right parenthesis
-			COMMA,
-			SEMICOLON,
-			COLON,
-			PERIOD,
-			BECOMES
+		public static enum SYMBOL {
+			 BEGINSYM
+			,CALLSYM
+			,CASESYM //added case
+			,CENDSYM //added cend
+			,CONSTSYM
+			,DOSYM
+			,DOWNTO //added downto
+			,ELSESYM //added else
+			,ENDSYM
+			,FORSYM //added for
+			,IFSYM
+			,ODDSYM
+			,OFSYM //added of
+			,PROCSYM
+			,REPEAT //added repeat
+			,THENSYM
+			,TOSYM  //added tosym
+			,UNTIL //added until
+			,VARSYM
+			,WHILESYM
+			,WRITESYM  //added write
+			,WRITELNSYM //added writeln
+			,NUL
+			,IDENT
+			,NUMBER
+			,PLUS
+			,MINUS
+			,TIMES
+			,SLASH
+			,EQL //equal
+			,NEQ //not equal
+			,LSS //less than
+			,LEQ //less than or equal to
+			,GTR //greater than
+			,GEQ //greater than or equal to
+			,LPAREN //left parenthesis
+			,RPAREN //right parenthesis
+			,COMMA
+			,SEMICOLON
+			,COLON
+			,PERIOD
+			,BECOMES
 		}
 
 		public static SYMBOL[] wsym =
 		{
-			SYMBOL.BEGINSYM,
-			SYMBOL.CALLSYM,
-		//	SYMBOL.CASESYM,  //added case
-			SYMBOL.CONSTSYM,
-			SYMBOL.DOSYM,
-		//	SYMBOL.DOWNTO, //added downto
-		//  SYMBOL.ELSESYM,  //added else
-			SYMBOL.ENDSYM,
-			SYMBOL.FORSYM, //added for
-			SYMBOL.IFSYM,
-			SYMBOL.ODDSYM,
-			SYMBOL.PROCSYM,
-			SYMBOL.THENSYM,
-		//	SYMBOL.TOSYM,  //added to
-			SYMBOL.VARSYM,
-			SYMBOL.WHILESYM,
-			SYMBOL.WRITESYM, //added write
-			SYMBOL.WRITELNSYM //added writeln
+			 SYMBOL.BEGINSYM
+			,SYMBOL.CALLSYM
+		//,SYMBOL.CASESYM  //added case
+			,SYMBOL.CONSTSYM
+			,SYMBOL.DOSYM
+		//,SYMBOL.DOWNTO //added downto
+		//,SYMBOL.ELSESYM  //added else
+			,SYMBOL.ENDSYM
+			,SYMBOL.FORSYM //added for
+			,SYMBOL.IFSYM
+			,SYMBOL.ODDSYM
+			,SYMBOL.PROCSYM
+			,SYMBOL.THENSYM
+		//	,SYMBOL.TOSYM  //added to
+			,SYMBOL.VARSYM
+			,SYMBOL.WHILESYM
+			,SYMBOL.WRITESYM //added write
+			,SYMBOL.WRITELNSYM //added writeln
 		};
 
-		public static class table_struct
-		{
+		public static class table_struct {
 				public String name;
 				public OBJECTS kind;
 
-				public table_struct(String init_name, OBJECTS init_kind)
-				{
+				public table_struct(String init_name, OBJECTS init_kind {
 					this.name = init_name;
 					this.kind = init_kind;
 				}
 		}
 
-		public static String Word[] =
-		{
-			"BEGIN",
-			"CALL",
-			"CONST",
-			"DO",
-			"END",
-			"FOR", //added for
-			"IF",
-			"ODD",
-			"PROCEDURE",
-			"THEN",
-			"VAR",
-			"WHILE",
-			"WRITE", //added write 
-			"WRITELN" //added writeln
+		public static String Word[] = {
+			 "BEGIN"
+			,"CALL"
+			,"CONST"
+			,"DO"
+			,"END"
+			,"FOR" //added for
+			,"IF"
+			,"ODD"
+			,"PROCEDURE"
+			,"THEN"
+			,"VAR"
+			,"WHILE"
+			,"WRITE" //added write
+			,"WRITELN" //added writeln
 		};
 
-		public static char Char_Word[][] =
-		{
-			{'B', 'E', 'G', 'I', 'N'},
-			{ 'C', 'A', 'L', 'L'},
-			{ 'C', 'O', 'N', 'S', 'T'},
-			{ 'D', 'O', },
-			{ 'E', 'N', 'D'},
-			{ 'F', 'O', 'R'}, //added for
-			{ 'I', 'F'},
-			{ 'O', 'D', 'D'},
-			{ 'P', 'R', 'O', 'C', 'E', 'D', 'U', 'R', 'E'},
-			{ 'T', 'H', 'E', 'N'},
-			{ 'V', 'A', 'R'},
-			{ 'W', 'H', 'I', 'L', 'E'},
-			{ 'W', 'R', 'I', 'T', 'E'}, //added write
-			{ 'W', 'R', 'I', 'T', 'E', 'L', 'N'} //added writeln
+		public static char Char_Word[][] = {
+			 {'B', 'E', 'G', 'I', 'N'}
+			,{ 'C', 'A', 'L', 'L'}
+			,{ 'C', 'O', 'N', 'S', 'T'}
+			,{ 'D', 'O', }
+			,{ 'E', 'N', 'D'}
+			,{ 'F', 'O', 'R'} //added for
+			,{ 'I', 'F'}
+			,{ 'O', 'D', 'D'}
+			,{ 'P', 'R', 'O', 'C', 'E', 'D', 'U', 'R', 'E'}
+			,{ 'T', 'H', 'E', 'N'}
+			,{ 'V', 'A', 'R'}
+			,{ 'W', 'H', 'I', 'L', 'E'}
+			,{ 'W', 'R', 'I', 'T', 'E'} //added write
+			,{ 'W', 'R', 'I', 'T', 'E', 'L', 'N'} //added writeln
 		};
 
 		static Scanner input;
@@ -146,49 +139,44 @@ public class compiler
 		static int id_length, cc, ll, kk, num;
 
 		/* Initializing list of error messages */
-		public static String ErrMsg[] =
-		{
-			"Use = instead of :=", /* 1 */
-			"= must be followed by a number", /* 2 */
-			"Identifier must be followed by =",/* 3 */
-			"Const, Var, Procedure must be followed by an identifier",/* 4 */
-			"Semicolon or comma missing",/* 5 */
-			"Incorrect symbol after procedure declaration",/* 6 */
-			"Statement expected",/* 7 */
-			"Incorrect symbol after statement part in block",/* 8 */
-			"Period expected", /* 9 */
-			"Semicolon between statements is missing",/* 10 */
-			"Undeclared identifier",/* 11 */
-			"Assignment to constant or procedure is not allowed",/* 12 */
-			"Assignment operator := expected",/* 13 */
-			"Call must be followed by an identifier",/* 14 */
-			"Call of a constant or a variable is meaningless",/* 15 */
-			"Then expected",/* 16 */
-			"Semicolon or end expected",/* 17 */
-			"Do expected",/* 18 */
-			"Incorrect symbol following statement",/* 19 */
-			"Relational operator expected",/* 20 */
-			"Procedure cannot return a value",/* 21 */
-			"Right parenthesis or relational operator expected",/* 22 */
-			"Number is too large",/* 23 */
-			"Identifier expected",/* 24 */
-			"An expression cannot begin with this symbol"/* 25 */
+		public static String ErrMsg[] = {
+			 "Use = instead of :=" /* 1 */
+			,"= must be followed by a number" /* 2 */
+			,"Identifier must be followed by ="/* 3 */
+			,"Const, Var, Procedure must be followed by an identifier"/* 4 */
+			,"Semicolon or comma missing"/* 5 */
+			,"Incorrect symbol after procedure declaration"/* 6 */
+			,"Statement expected"/* 7 */
+			,"Incorrect symbol after statement part in block"/* 8 */
+			,"Period expected" /* 9 */
+			,"Semicolon between statements is missing"/* 10 */
+			,"Undeclared identifier"/* 11 */
+			,"Assignment to constant or procedure is not allowed"/* 12 */
+			,"Assignment operator := expected"/* 13 */
+			,"Call must be followed by an identifier"/* 14 */
+			,"Call of a constant or a variable is meaningless"/* 15 */
+			,"Then expected"/* 16 */
+			,"Semicolon or end expected"/* 17 */
+			,"Do expected"/* 18 */
+			,"Incorrect symbol following statement"/* 19 */
+			,"Relational operator expected"/* 20 */
+			,"Procedure cannot return a value"/* 21 */
+			,"Right parenthesis or relational operator expected"/* 22 */
+			,"Number is too large"/* 23 */
+			,"Identifier expected"/* 24 */
+			,"An expression cannot begin with this symbol"/* 25 */
 		};
 
 		/* Simple Error Outputting Function */
-		public static void Error(int ErrorNumber)
-		{
+		public static void Error(int ErrorNumber) {
 			System.out.println(ErrMsg[ErrorNumber - 1]);
 			System.exit(-1);
 		}
 
-		public static void GetChar()
-		{
+		public static void GetChar() {
 		   // System.out.println("In GetChar\n");
-			if (cc == ll)
-			{
-				if (input.hasNext())
-				{
+			if (cc == ll) {
+				if (input.hasNext()) {
 					ll = 0;
 					cc = 0;
 
@@ -197,88 +185,74 @@ public class compiler
 				//	System.out.println("printing str_line");
 					System.out.println(str_line);
 				//	System.out.println("\n");
-					
+
 					ll = str_line.length();
 
-					if (ll > 0)
-					{
+					if (ll > 0) {
 						if (line[ll-1] == 13) ll--;
 						if (line[ll-1] == 10) ll--;
 						if (line[ll-1] == 13) ll--;
 						if (line[ll-1] == 10) ll--;
 						ch = line[cc++];
-					}
-					else
+					} else
 						ch = ' ';
 				}
-			}
-			else
+			} else
 				ch = line[cc++];
 
 			while (ch == '\t')
 				ch = line[cc++];
 		}
 
-		public static void GetSym()
-		{
+		public static void GetSym() {
 		  // 	System.out.println("\n\n\nEntering GetSym\n");
 
 			int i, j, k;
-            
-            //skipping through whitespaces until an acutal char is read
+
+      //skipping through whitespaces until an acutal char is read
 			while (ch == ' ' || ch == '\r' || ch == '\n')
 				GetChar();
-    
+
         //	System.out.println("Char is");
         //	System.out.println(ch);
         //	System.out.println("\n");
 
             //if equal to a letter
-			if (ch >= 'A' && ch <= 'Z')
-			{
+			if (ch >= 'A' && ch <= 'Z') {
 				k = 0;
 				int x = 0;
-                
-                //int AL = 20 (global)
-                //fills a[] and id[] with '\0' (both of size 20)
-				for (; x < AL; x++)
-				{
 
+        //int AL = 20 (global)
+        //fills a[] and id[] with '\0' (both of size 20)
+				for (; x < AL; x++) {
 					a[x]  = '\0';
 					id[x] = '\0';
 				}
 
 
-				do //while ch is a letter or a number A-Z or 0-9
-				{
-				    //k starts at 0, AL = 20
-				    //fills a[] with char
-					if (k < AL){
-					//	System.out.println("Filling a[]\n");
+				do { //while ch is a letter or a number A-Z or 0-9
+			  	//k starts at 0, AL = 20
+			  	//fills a[] with char
+					if (k < AL) {
+					// System.out.println("Filling a[]\n");
 						a[k++] = ch;
-				    }
-				//}
-				    //gets last char of current sequence then breaks
-					if (cc == ll)
-					{
+				  }
+				  //gets last char of current sequence then breaks
+					if (cc == ll) {
 					  //  System.out.println(" cc == ll\n");
-
 						GetChar();
 						break;
 					}
 					else
 						GetChar();
 				} while ((ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9'));
-				
-				
-				
 
-                //id[] now had all chars in it from a
+        //id[] now had all chars in it from a
 				id = a;
-			//	System.out.println(" ID = ");
-             //   System.out.println(id);
-             //   System.out.println("\n ");
-                
+				//	System.out.println(" ID = ");
+				//   System.out.println(id);
+        //   System.out.println("\n ");
+
 				i = 0;
 				j = NORW - 1; //NORW = 11 so j = 10
 
@@ -286,117 +260,80 @@ public class compiler
 					id_length = 1;
 				else
 					id_length = k--;
-                
-                //tries to match temp_id with a Word
-				do
-				{
+
+        //tries to match temp_id with a Word
+				do {
 					k = i + j; //i=0 and j =10 so k =10
 					k = k / 2; //k = 5
-                    
-                    //temp_id had id in it now
+
+          //temp_id had id in it now
 					temp_id = String.copyValueOf(id, 0, id_length);
 
-					if (id[0] <= Char_Word[k][0])
-					{
-			            	
-						if (temp_id.compareTo(Word[k]) <= 0){
-						  
+					if (id[0] <= Char_Word[k][0]) {
+						if (temp_id.compareTo(Word[k]) <= 0) {
 							j = k - 1;
 						}
 					}
-					if (id[0] >= Char_Word[k][0])
-					{
-					        
-						if (temp_id.compareTo(Word[k]) >= 0){
-					    	
+					if (id[0] >= Char_Word[k][0]) {
+						if (temp_id.compareTo(Word[k]) >= 0) {
 							i = k + 1;
 						}
 					}
 				} while (i <= j);
+        // if temp id is printing the same as ID then it found the match
+				// System.out.println("temp_id is ");
+        // System.out.println(temp_id);
 
-                //if temp id is printing the same as ID then it found the match
-             //   System.out.println("temp_id is ");
-             //   System.out.println(temp_id);
-                
 				if (i - 1 > j)
 					sym = wsym[k];
 				else
 					sym = SYMBOL.IDENT;
-					
-			//	System.out.println("\nsym is ");
-			//	System.out.println(sym);
-			}//end of if(A-Z)
-			
-			//if 0-9
-			else if (ch >= '0' && ch <= '9')
-			{
+
+			// System.out.println("\nsym is ");
+			// System.out.println(sym);
+
+			//end of if (A-Z)
+			} else if (ch >= '0' && ch <= '9') {
 				k = 0;
 				num = 0;
 				sym = SYMBOL.NUMBER;
-
-				do
-				{
+				do {
 					if (k >= NMAX)
 						Error(23);
-
 					num = 10 * num + (ch - '0');
 					k++;
-
 					GetChar();
 				} while (ch >= '0' && ch <= '9');
-			}//end of if(0-9)
-			
-			
-			else if (ch == ':')
-			{
-			  //  System.out.println("/n in semi/n");
-				GetChar();
 
-				if (ch == '=')
-				{
+			} else if (ch == ':') {
+			  // System.out.println("/n in semi/n");
+				GetChar();
+				if (ch == '=') {
 					sym = SYMBOL.BECOMES;
 					GetChar();
-				}
-				else
+				} else
 					sym = SYMBOL.COLON;
-			}
-			
-			
-			else if (ch == '>')
-			{
-				GetChar();
 
-				if (ch == '=')
-				{
+			} else if (ch == '>') {
+				GetChar();
+				if (ch == '=') {
 					sym = SYMBOL.GEQ;
 					GetChar();
-				}
-				else
+				} else
 					sym = SYMBOL.GTR;
-			}
-			
-			
-			else if (ch == '<')
-			{
-				GetChar();
 
-				if (ch == '=')
-				{
+			} else if (ch == '<') {
+				GetChar();
+				if (ch == '=') {
 					sym = SYMBOL.LEQ;
 					GetChar();
-				}
-				else if (ch == '>')
-				{
+				} else if (ch == '>') {
 					sym = SYMBOL.NEQ;
 					GetChar();
-				}
-				else
+				} else
 					sym = SYMBOL.LSS;
-			}
-			
-			
-			else
-			{
+
+			} else {
 				if (ch == '+')
 					sym = SYMBOL.PLUS;
 				else if (ch == '-')
@@ -420,37 +357,28 @@ public class compiler
 
 				GetChar();
 			}
-		}
+		} // End GetSym()
 
-		public static int Enter(OBJECTS k, int tx)
-		{
+		public static int Enter(OBJECTS k, int tx) {
 			tx++;
 			table[tx].name = String.valueOf(id);
 			table[tx].kind = k;
-
 			return tx;
 		}
 
-		public static int Position(char id[], int tx)
-		{
+		public static int Position(char id[], int tx) {
 			int i = tx;
-
 			table[0].name = String.valueOf(id);
-
 			while (!table[i].name.equals(String.valueOf(id)))
 				i--;
-
 			return i;
 		}
 
-		public static void Block(int tx)
-		{
-			if (sym == SYMBOL.CONSTSYM)
-			{
+		public static void Block(int tx) {
+			if (sym == SYMBOL.CONSTSYM) {
 				GetSym();
 				tx = ConstDeclaration(tx);
-				while (sym == SYMBOL.COMMA)
-				{
+				while (sym == SYMBOL.COMMA) {
 					GetSym();
 					tx = ConstDeclaration(tx);
 				}
@@ -458,177 +386,138 @@ public class compiler
 					GetSym();
 				else
 					Error(5);
-			} /* End if (CONSTSYM) */
+			}
 
-			if (sym == SYMBOL.VARSYM)
-			{
+			if (sym == SYMBOL.VARSYM) {
 				GetSym();
 				tx = VarDeclaration(tx);
-				while (sym == SYMBOL.COMMA)
-				{
+				while (sym == SYMBOL.COMMA) {
 					GetSym();
 					tx = VarDeclaration(tx);
 				}
-
 				if (sym == SYMBOL.SEMICOLON)
 					GetSym();
 				else
 					Error(5);
-			} /* END if (VARSYM) */
+			}
 
-			while (sym == SYMBOL.PROCSYM)
-			{
+			while (sym == SYMBOL.PROCSYM) {
 				GetSym();
-
-				if (sym == SYMBOL.IDENT)
-				{
+				if (sym == SYMBOL.IDENT) {
 					tx = Enter(OBJECTS.Procedure, tx);
 					GetSym();
-				}
-				else
+				} else
 					Error(6);
-
 				if (sym == SYMBOL.SEMICOLON)
 					GetSym();
 				else
 					Error(5);
 
 				Block(tx);
-
 				if (sym == SYMBOL.SEMICOLON)
 					GetSym();
 				else
 					Error(5);
 			}
-
 			Statement(tx);
-		}
+		} // End Block()
 
-		public static void Factor(int tx)
-		{
+		public static void Factor(int tx) {
 			int i;
-
-			if (sym == SYMBOL.IDENT)
-			{
+			if (sym == SYMBOL.IDENT) {
 				if ((i = Position(id, tx)) == FALSE)
 					Error(11);
 				GetSym();
 			}
 			else if (sym == SYMBOL.NUMBER)
 				GetSym();
-			else if (sym == SYMBOL.LPAREN)
-			{
+			else if (sym == SYMBOL.LPAREN) {
 				GetSym();
 				Expression(tx);
 				if (sym == SYMBOL.RPAREN)
 					GetSym();
 				else
 					Error(22);
-			}
-			else
+			} else
 				Error(25);
 		}
 
-		public static void Term(int tx)
-		{
+		public static void Term(int tx) {
 			Factor(tx);
-
-			while (sym == SYMBOL.TIMES || sym == SYMBOL.SLASH)
-			{
+			while (sym == SYMBOL.TIMES || sym == SYMBOL.SLASH) {
 				GetSym();
 				Factor(tx);
 			}
 		}
 
-		public static void Expression(int tx)
-		{
-			if (sym == SYMBOL.PLUS || sym == SYMBOL.MINUS)
-			{
+		public static void Expression(int tx) {
+			if (sym == SYMBOL.PLUS || sym == SYMBOL.MINUS) {
 				GetSym();
 				Term(tx);
-			}
-			else
+			} else
 				Term(tx);
-
-			while (sym == SYMBOL.PLUS || sym == SYMBOL.MINUS)
-			{
+			while (sym == SYMBOL.PLUS || sym == SYMBOL.MINUS) {
 				GetSym();
 				Term(tx);
 			}
 		}
 
-		public static void Condition(int tx)
-		{
-			if (sym == SYMBOL.ODDSYM)
-			{
+		public static void Condition(int tx) {
+			if (sym == SYMBOL.ODDSYM) {
 				GetSym();
 				Expression(tx);
-			}
-			else
-			{
-				Expression(tx);
 
-				if ((sym == SYMBOL.EQL) || (sym == SYMBOL.GTR) || (sym == SYMBOL.LSS) ||
-				                (sym == SYMBOL.NEQ) || (sym == SYMBOL.LEQ) || (sym == SYMBOL.GEQ))
-				{
+			} else {
+				Expression(tx);
+				if (
+							 (sym == SYMBOL.EQL)
+						|| (sym == SYMBOL.GTR)
+						|| (sym == SYMBOL.LSS)
+						|| (sym == SYMBOL.NEQ)
+						|| (sym == SYMBOL.LEQ)
+						|| (sym == SYMBOL.GEQ)
+				) {
 					GetSym();
 					Expression(tx);
-				}
-				else
+				} else
 					Error(20);
 			}
 		}
 
-		public static int ConstDeclaration(int tx)
-		{
-			if (sym == SYMBOL.IDENT)
-			{
+		public static int ConstDeclaration(int tx) {
+			if (sym == SYMBOL.IDENT) {
 				GetSym();
-				if (sym == SYMBOL.EQL)
-				{
+				if (sym == SYMBOL.EQL) {
 					GetSym();
-					if (sym == SYMBOL.NUMBER)
-					{
+					if (sym == SYMBOL.NUMBER) {
 						tx = Enter(OBJECTS.Constant, tx);
 						GetSym();
-					}
-					else
+					} else
 						Error(2);
-				}
-				else
+				} else
 					Error(3);
-			}
-			else
+			} else
 				Error(4);
-
 			return tx;
 		}
 
-		public static int VarDeclaration(int tx)
-		{
-			if (sym == SYMBOL.IDENT)
-			{
+		public static int VarDeclaration(int tx) {
+			if (sym == SYMBOL.IDENT) {
 				tx = Enter(OBJECTS.Variable, tx);
 				GetSym();
-			}
-			else
+			} else
 				Error(4);
-
 			return tx;
 		}
 
-		public static void Statement(int tx)
-		{
+		public static void Statement(int tx) {
 			int i;
-            
-            //add statement syms here
-			switch (sym)
-			{
+      //add statement syms here
+			switch (sym) {
 				case BEGINSYM:
 					GetSym();
 					Statement(tx);
-					while (sym == SYMBOL.SEMICOLON)
-					{
+					while (sym == SYMBOL.SEMICOLON) {
 						GetSym();
 						Statement(tx);
 					}
@@ -651,42 +540,43 @@ public class compiler
 						Error(13);
 					Expression(tx);
 					break;
-                
-                //added FORSYM
-                case FORSYM:
-                    GetSym();
-                    if(sym != SYMBOL.IDENT)
-                        Error(14);
-                    i = Position(id, tx);
-                    if(i == 0)
-                        Error(11);
-                    GetSym();
-                    if(sym != SYMBOL.BECOMES)
-                        Error(13);
-                    GetSym();
-                    Expression(tx);
-                    if(sym == SYMBOL.TOSYM){
-                        GetSym();
-                        Expression(tx);
-                        if(sym != SYMBOL.DOSYM){
-                            System.out.println(sym);
-                            Error(18);
-                        }
-                        GetSym();
-                        Statement(tx);
-                    }
-                    else if(sym == SYMBOL.DOWNTO){
-                        GetSym();
-                        Expression(tx);
-                        if(sym != SYMBOL.DOSYM)
-                            Error(18);
-                        GetSym();
-                        Statement(tx);
-                    }
-                    else
-                        Error(31);
-                    break; /* FORSYM */
-					
+
+        //added FORSYM
+        case FORSYM:
+          GetSym();
+          if (sym != SYMBOL.IDENT)
+            Error(14);
+          i = Position(id, tx);
+          if (i == 0)
+            Error(11);
+          GetSym();
+          if (sym != SYMBOL.BECOMES)
+            Error(13);
+          GetSym();
+          Expression(tx);
+
+          if (sym == SYMBOL.TOSYM) {
+            GetSym();
+            Expression(tx);
+            if (sym != SYMBOL.DOSYM) {
+              System.out.println(sym);
+              Error(18);
+            }
+            GetSym();
+            Statement(tx);
+
+					} else if (sym == SYMBOL.DOWNTO) {
+            GetSym();
+            Expression(tx);
+            if (sym != SYMBOL.DOSYM)
+              Error(18);
+            GetSym();
+            Statement(tx);
+
+					} else // Not TO nor DOWNTO
+            Error(31);
+          break; /* FORSYM */
+
 				case IFSYM:
 					GetSym();
 					Condition(tx);
@@ -695,123 +585,114 @@ public class compiler
 					else
 						Error(16);
 					Statement(tx);
-					
+
 					//added ELSE
-					if(sym == SYMBOL.ELSESYM){
-					    GetSym();
-					    Statement(tx);
-					}
-					break; /* IF THEN ELSE */
-				
-				//added REPEAT	
-				case REPEAT:
+					if (sym == SYMBOL.ELSESYM) {
 				    GetSym();
 				    Statement(tx);
-				    while(sym == SYMBOL.SEMICOLON){
-				        GetSym();
-				        Statement(tx);
-				    }
-				    if(sym != SYMBOL.UNTIL)
-				        Error(27);
-				    GetSym();
-				    Condition(tx);
-				    break; /*REPEAT UNTIL*/
+					}
+					break; /* IF THEN ELSE */
+
+				//added REPEAT
+				case REPEAT:
+			    GetSym();
+			    Statement(tx);
+			    while (sym == SYMBOL.SEMICOLON) {
+		        GetSym();
+		        Statement(tx);
+			    }
+			    if (sym != SYMBOL.UNTIL)
+		        Error(27);
+			    GetSym();
+			    Condition(tx);
+			    break; /*REPEAT UNTIL*/
 
 				case WHILESYM:
 					GetSym();
 					Condition(tx);
-					if (sym == SYMBOL.DOSYM)
-					{
+					if (sym == SYMBOL.DOSYM) {
 						GetSym();
 						Statement(tx);
 					}
 					else
 						Error(18);
 					break; /* WHILESYM */
-                
-                //added WRITESYM
-                case WRITESYM:
-                    GetSym();
-                    if(sym != SYMBOL.LPAREN)
-                        Error(33);
-                        GetSym();
-                        Expression(tx);
-                        while(sym == SYMBOL.COMMA){
-                            GetSym();
-                            Expression(tx);
-                        }
-                        if(sym != SYMBOL.RPAREN)
-                            Error(22);
-                        GetSym();
-                        break; /*WRITESYM*/
-                
-                
-                //added WRITELNSYM      
-                case WRITELNSYM:
-                    GetSym();
-                    if(sym != SYMBOL.LPAREN)
-                        Error(33);
-                        GetSym();
-                        Expression(tx);
-                        while(sym == SYMBOL.COMMA){
-                            GetSym();
-                            Expression(tx);
-                        }
-                        if(sym != SYMBOL.RPAREN)
-                            Error(22);
-                        GetSym();
-                        break; /*WRITELNSYM*/
-                        
-                
-                case CASESYM:
-                    GetSym();
-                    Expression(tx);
-                    if(sym == SYMBOL.OFSYM)
-                        Error(28);
-                    GetSym(); //expression 1
-                    while(sym != SYMBOL.CENDSYM && sym != SYMBOL.ELSESYM){
-                        Expression(tx);
-                        if(sym != SYMBOL.COLON)
-                            Error(29);
-                        GetSym();
-                        Statement(tx);
-                        GetSym(); //next expression or end
-                    }
-                    if(sym == SYMBOL.ELSESYM){
-                        GetSym();
-                        Statement(tx);
-                    }
-                    if(sym != SYMBOL.CENDSYM)
-                        Error(30);
-                    GetSym();
-                    break; /*CASE*/ 
-                        
+
+      	//added WRITESYM
+      	case WRITESYM:
+        	GetSym();
+          if (sym != SYMBOL.LPAREN)
+            Error(33);
+          GetSym();
+          Expression(tx);
+          while (sym == SYMBOL.COMMA) {
+            GetSym();
+            Expression(tx);
+          }
+          if (sym != SYMBOL.RPAREN)
+            Error(22);
+          GetSym();
+          break; /*WRITESYM*/
+
+
+        //added WRITELNSYM
+        case WRITELNSYM:
+          GetSym();
+          if (sym != SYMBOL.LPAREN)
+            Error(33);
+          GetSym();
+          Expression(tx);
+          while (sym == SYMBOL.COMMA) {
+            GetSym();
+            Expression(tx);
+          }
+          if (sym != SYMBOL.RPAREN)
+            Error(22);
+          GetSym();
+          break; /*WRITELNSYM*/
+
+
+        case CASESYM:
+          GetSym();
+          Expression(tx);
+          if (sym == SYMBOL.OFSYM)
+            Error(28);
+          GetSym(); //expression 1
+          while (sym != SYMBOL.CENDSYM && sym != SYMBOL.ELSESYM) {
+            Expression(tx);
+            if (sym != SYMBOL.COLON)
+              Error(29);
+            GetSym();
+            Statement(tx);
+            GetSym(); //next expression or end
+          }
+          if (sym == SYMBOL.ELSESYM) {
+            GetSym();
+            Statement(tx);
+          }
+          if (sym != SYMBOL.CENDSYM)
+            Error(30);
+          GetSym();
+          break; /*CASE*/
+
 				case CALLSYM:
 					GetSym();
-					if (sym == SYMBOL.IDENT)
-					{
+					if (sym == SYMBOL.IDENT) {
 						if ((i = Position(id, tx)) == FALSE)
 							Error(11);
-						else
-							if (table[i].kind != OBJECTS.Procedure)
+						else if (table[i].kind != OBJECTS.Procedure)
 								Error(15);
 						GetSym();
-					}
-					else
+					} else
 						Error(14);
 					break; //CALLSYM
-					  
-			}
-		}
+			} // End switch
+		} //end statement()
 
-		public static void main(String[] args)
-		{
-			try
-			{
+		public static void main(String[] args) {
+			try {
 				input = new Scanner(System.in);
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				System.err.println("Error Getting Input");
 				System.exit(1);
 			}
@@ -821,8 +702,7 @@ public class compiler
 			ch = ' ';
 			kk = AL;
 
-			for (int q = 0; q < TXMAX; q++)
-			{
+			for (int q = 0; q < TXMAX; q) {
 				table[q] = new table_struct("", OBJECTS.None);
 			}
 
