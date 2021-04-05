@@ -242,8 +242,7 @@ public class compiler {
 					  //  System.out.println(" cc == ll\n");
 						GetChar();
 						break;
-					}
-					else
+					} else
 						GetChar();
 				} while ((ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9'));
 
@@ -428,8 +427,7 @@ public class compiler {
 				if ((i = Position(id, tx)) == FALSE)
 					Error(11);
 				GetSym();
-			}
-			else if (sym == SYMBOL.NUMBER)
+			} else if (sym == SYMBOL.NUMBER)
 				GetSym();
 			else if (sym == SYMBOL.LPAREN) {
 				GetSym();
@@ -613,8 +611,7 @@ public class compiler {
 					if (sym == SYMBOL.DOSYM) {
 						GetSym();
 						Statement(tx);
-					}
-					else
+					} else
 						Error(18);
 					break; /* WHILESYM */
 
