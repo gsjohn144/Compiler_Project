@@ -140,31 +140,31 @@ public class compiler {
 
 		/* Initializing list of error messages */
 		public static String ErrMsg[] = {
-			 "Use = instead of :=" /* 1 */
-			,"= must be followed by a number" /* 2 */
-			,"Identifier must be followed by ="/* 3 */
-			,"Const, Var, Procedure must be followed by an identifier"/* 4 */
-			,"Semicolon or comma missing"/* 5 */
-			,"Incorrect symbol after procedure declaration"/* 6 */
-			,"Statement expected"/* 7 */
-			,"Incorrect symbol after statement part in block"/* 8 */
-			,"Period expected" /* 9 */
-			,"Semicolon between statements is missing"/* 10 */
-			,"Undeclared identifier"/* 11 */
-			,"Assignment to constant or procedure is not allowed"/* 12 */
-			,"Assignment operator := expected"/* 13 */
-			,"Call must be followed by an identifier"/* 14 */
-			,"Call of a constant or a variable is meaningless"/* 15 */
-			,"Then expected"/* 16 */
-			,"Semicolon or end expected"/* 17 */
-			,"Do expected"/* 18 */
-			,"Incorrect symbol following statement"/* 19 */
-			,"Relational operator expected"/* 20 */
-			,"Procedure cannot return a value"/* 21 */
-			,"Right parenthesis or relational operator expected"/* 22 */
-			,"Number is too large"/* 23 */
-			,"Identifier expected"/* 24 */
-			,"An expression cannot begin with this symbol"/* 25 */
+			 "Use = instead of :="	// 1
+			,"= must be followed by a number"
+			,"Identifier must be followed by ="
+			,"Const, Var, Procedure must be followed by an identifier"
+			,"Semicolon or comma missing"		// 5
+			,"Incorrect symbol after procedure declaration"
+			,"Statement expected"
+			,"Incorrect symbol after statement part in block"
+			,"Period expected"
+			,"Semicolon between statements is missing"		// 10
+			,"Undeclared identifier"
+			,"Assignment to constant or procedure is not allowed"
+			,"Assignment operator := expected"
+			,"Call must be followed by an identifier"
+			,"Call of a constant or a variable is meaningless"		// 15
+			,"Then expected"
+			,"Semicolon or end expected"
+			,"Do expected"
+			,"Incorrect symbol following statement"
+			,"Relational operator expected"			// 20
+			,"Procedure cannot return a value"
+			,"Right parenthesis or relational operator expected"
+			,"Number is too large"
+			,"Identifier expected"
+			,"An expression cannot begin with this symbol"		// 25
 		};
 
 		/* Simple Error Outputting Function */
