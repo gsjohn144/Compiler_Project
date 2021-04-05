@@ -495,8 +495,6 @@ void statement(symbol &sym, int tableinx)
 			}
 			getsym(sym);
 			break;
-		default:
-			break;
 		case CASE:
 			getsym(sym), expression(sym, tableinx);
 			if (sym != OF)
@@ -522,6 +520,8 @@ void statement(symbol &sym, int tableinx)
 			if (sym != CEND)
 				error(CEND_ERROR);
 			getsym(sym);
+			break;
+		default:
 			break;
 	}
 }
