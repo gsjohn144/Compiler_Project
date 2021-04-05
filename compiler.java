@@ -88,7 +88,7 @@ public class compiler {
 				public String name;
 				public OBJECTS kind;
 
-				public table_struct(String init_name, OBJECTS init_kind {
+				public table_struct(String init_name, OBJECTS init_kind) {
 					this.name = init_name;
 					this.kind = init_kind;
 				}
@@ -169,12 +169,15 @@ public class compiler {
 
 		/* Simple Error Outputting Function */
 		public static void Error(int ErrorNumber) {
-			System.out.println(ErrMsg[ErrorNumber - 1]);
+			try {
+				System.out.println(ErrMsg[ErrorNumber - 1]);
+			} catch (IndexOutOfBoundsException e){
+				System.out.println("An unknown error '" + Integer.toString(ErrorNumber) + "' occured");
+			}
 			System.exit(-1);
 		}
 
 		public static void GetChar() {
-		   // System.out.println("In GetChar\n");
 			if (cc == ll) {
 				if (input.hasNext()) {
 					ll = 0;
@@ -182,10 +185,7 @@ public class compiler {
 
 					str_line = input.nextLine();
 					line = str_line.toCharArray(); //converts string to char array
-				//	System.out.println("printing str_line");
 					System.out.println(str_line);
-				//	System.out.println("\n");
-
 					ll = str_line.length();
 
 					if (ll > 0) {
@@ -202,6 +202,7 @@ public class compiler {
 
 			while (ch == '\t')
 				ch = line[cc++];
+			ch = Character.toUpperCase(ch);
 		}
 
 		public static void GetSym() {
@@ -699,7 +700,7 @@ public class compiler {
 			ch = ' ';
 			kk = AL;
 
-			for (int q = 0; q < TXMAX; q) {
+			for (int q = 0; q < TXMAX; q++) {
 				table[q] = new table_struct("", OBJECTS.None);
 			}
 
