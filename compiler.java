@@ -4,7 +4,7 @@ import java.io.*;
 public class compiler {
 		static private final int TRUE = 1;
 		static private final int FALSE = 0;
-		static private final int NORW = 11;
+		static private final int NORW = 18;
 		static private final int TXMAX = 100;
 		static private final int NMAX = 14;
 		static private final int AL = 20;
@@ -38,8 +38,8 @@ public class compiler {
 			,UNTIL //added until
 			,VARSYM
 			,WHILESYM
-			,WRITESYM  //added write
 			,WRITELNSYM //added writeln
+			,WRITESYM  //added write
 			,NUL
 			,IDENT
 			,NUMBER
@@ -62,26 +62,28 @@ public class compiler {
 			,BECOMES
 		}
 
+		// NORW needs to be updated to keep an accurate count of these
+		// Must be in lexicographical order
 		public static SYMBOL[] wsym =
 		{
 			 SYMBOL.BEGINSYM
 			,SYMBOL.CALLSYM
-		//,SYMBOL.CASESYM  //added case
+			,SYMBOL.CASESYM  //added case
 			,SYMBOL.CONSTSYM
 			,SYMBOL.DOSYM
-		//,SYMBOL.DOWNTO //added downto
-		//,SYMBOL.ELSESYM  //added else
+		  ,SYMBOL.DOWNTO //added downto
+		  ,SYMBOL.ELSESYM  //added else
 			,SYMBOL.ENDSYM
 			,SYMBOL.FORSYM //added for
 			,SYMBOL.IFSYM
 			,SYMBOL.ODDSYM
 			,SYMBOL.PROCSYM
 			,SYMBOL.THENSYM
-		//	,SYMBOL.TOSYM  //added to
+			,SYMBOL.TOSYM  //added to
 			,SYMBOL.VARSYM
 			,SYMBOL.WHILESYM
-			,SYMBOL.WRITESYM //added write
 			,SYMBOL.WRITELNSYM //added writeln
+			,SYMBOL.WRITESYM //added write
 		};
 
 		public static class table_struct {
@@ -97,14 +99,18 @@ public class compiler {
 		public static String Word[] = {
 			 "BEGIN"
 			,"CALL"
+			,"CASE"	// added case
 			,"CONST"
 			,"DO"
+			,"DOWNTO"	// added downto
+			,"ELSE"	// added else
 			,"END"
 			,"FOR" //added for
 			,"IF"
 			,"ODD"
 			,"PROCEDURE"
 			,"THEN"
+			,"TO"	// added to
 			,"VAR"
 			,"WHILE"
 			,"WRITE" //added write
@@ -114,14 +120,18 @@ public class compiler {
 		public static char Char_Word[][] = {
 			 {'B', 'E', 'G', 'I', 'N'}
 			,{ 'C', 'A', 'L', 'L'}
+			,{ 'C', 'A', 'S', 'E'} // added case
 			,{ 'C', 'O', 'N', 'S', 'T'}
 			,{ 'D', 'O', }
+			,{ 'D', 'O', 'W', 'N', 'T', 'O'} // added downto
+			,{ 'E', 'L', 'S', 'E'} // added else
 			,{ 'E', 'N', 'D'}
 			,{ 'F', 'O', 'R'} //added for
 			,{ 'I', 'F'}
 			,{ 'O', 'D', 'D'}
 			,{ 'P', 'R', 'O', 'C', 'E', 'D', 'U', 'R', 'E'}
 			,{ 'T', 'H', 'E', 'N'}
+			,{ 'T', 'O'}	// added to
 			,{ 'V', 'A', 'R'}
 			,{ 'W', 'H', 'I', 'L', 'E'}
 			,{ 'W', 'R', 'I', 'T', 'E'} //added write
@@ -206,67 +216,42 @@ public class compiler {
 		}
 
 		public static void GetSym() {
-		  // 	System.out.println("\n\n\nEntering GetSym\n");
-
 			int i, j, k;
 
-      //skipping through whitespaces until an acutal char is read
+      //skipping through whitespaces until an actual char is read
 			while (ch == ' ' || ch == '\r' || ch == '\n')
 				GetChar();
 
-        //	System.out.println("Char is");
-        //	System.out.println(ch);
-        //	System.out.println("\n");
-
-            //if equal to a letter
 			if (ch >= 'A' && ch <= 'Z') {
-				k = 0;
-				int x = 0;
-
-        //int AL = 20 (global)
-        //fills a[] and id[] with '\0' (both of size 20)
-				for (; x < AL; x++) {
+				for (int x = 0; x < AL; x++) {
 					a[x]  = '\0';
 					id[x] = '\0';
 				}
 
-
-				do { //while ch is a letter or a number A-Z or 0-9
-			  	//k starts at 0, AL = 20
-			  	//fills a[] with char
+				k = 0;
+				do { //while ch in [A-Z0-9]
 					if (k < AL) {
-					// System.out.println("Filling a[]\n");
-						a[k++] = ch;
+						a[k] = ch;
+						k++;
 				  }
-				  //gets last char of current sequence then breaks
+				  // at the end of the line
 					if (cc == ll) {
-					  //  System.out.println(" cc == ll\n");
 						GetChar();
 						break;
-					} else
-						GetChar();
+					}
+					GetChar();
 				} while ((ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <= '9'));
 
-        //id[] now had all chars in it from a
 				id = a;
-				//	System.out.println(" ID = ");
-				//   System.out.println(id);
-        //   System.out.println("\n ");
-
 				i = 0;
-				j = NORW - 1; //NORW = 11 so j = 10
+				j = NORW - 1; // max index of wsym
+				id_length = k; // k is index of first \0
 
-				if (k == 1)
-					id_length = 1;
-				else
-					id_length = k--;
-
-        //tries to match temp_id with a Word
+				// performs a binary search
 				do {
-					k = i + j; //i=0 and j =10 so k =10
-					k = k / 2; //k = 5
+					k = i + j;
+					k = k / 2;
 
-          //temp_id had id in it now
 					temp_id = String.copyValueOf(id, 0, id_length);
 
 					if (id[0] <= Char_Word[k][0]) {
@@ -306,7 +291,6 @@ public class compiler {
 				} while (ch >= '0' && ch <= '9');
 
 			} else if (ch == ':') {
-			  // System.out.println("/n in semi/n");
 				GetChar();
 				if (ch == '=') {
 					sym = SYMBOL.BECOMES;
@@ -529,7 +513,8 @@ public class compiler {
 					break;
 
 				case IDENT:
-					if ((i = Position(id, tx)) == FALSE)
+					i = Position(id, tx);
+					if (i == 0)
 						Error(11);
 					else
 						if (table[i].kind != OBJECTS.Variable)
