@@ -38,9 +38,8 @@ if infilePath is None:
 else:
     infile = open(infilePath, "r")
 if outfilePath is None:
-    outfile = open("./a.out", "w")
-else:
-    outfile = open(outfilePath, "w")
+    outfilePath = "a.out"
+outfile = open(outfilePath, "w")
 
 
 # -------------values to put in the symbol table------------------------------------------------------------
@@ -249,6 +248,7 @@ def error(num):
     global errorFlag
     errorFlag = 1
     print("\n")
+    sys.stderr.write("An error occured, check '" + outfilePath + "' for details\n")
     if num == 1:
         outfile.write("Use '=' instead of ':='\n")
     elif num == 2:
@@ -301,6 +301,7 @@ def error(num):
         outfile.write("Constant or Number is expected\n")
     elif num == 26:
         outfile.write("This number is too large\n")
+    # Additional errors
     elif num == 27:
         outfile.write("'UNTIL' expected\n")
     elif num == 28:
@@ -423,12 +424,8 @@ def enter(tx, k, level, dx):
         dx += 1
     elif k == "procedure":
         x = tableValue(id, k, level, dx, "NULL")
-    # The original didn't have an else clause because it should never
-    # be called w/o the necessary arguments, and if it is, we want it to
-    # error, not propogate bad data
-
-    #else:
-    #    x = tableValue(None, None, None, None, None)
+    else:
+        error()
     table.append(x)
     return dx
 
@@ -552,7 +549,9 @@ def statement(tx, level):
         getsym()
         statement(tx, level)
         fixJmp(cx1, codeIndx)
-        # ELSE
+
+
+        ''' Added ELSE '''
         if sym == "ELSE":
             cx2 = codeIndx
             gen("JMP", 0, 0) # Jump past else when coming out of if
@@ -581,6 +580,8 @@ def statement(tx, level):
         statement(tx, level)
         gen("JMP", 0, cx1)
         fixJmp(cx2, codeIndx)
+
+        ''' Begin Additions '''
     elif sym == "REPEAT":
         getsym()
         cx1 = codeIndx
@@ -593,6 +594,7 @@ def statement(tx, level):
         getsym()
         condition(tx, level)
         gen("JPC", 0, cx1)
+
     elif sym == "FOR":
         getsym()
         if sym != "ident":
@@ -621,7 +623,6 @@ def statement(tx, level):
             cx1 = codeIndx
             gen("JPC", 0, 0)
             if sym != "DO":
-                print(sym)
                 error(18)
             getsym()
             statement(tx, level) # loop body
@@ -653,6 +654,8 @@ def statement(tx, level):
         gen("JMP", 0, cx2) # loop
         fixJmp(cx1, codeIndx)
         gen("DEC", 0, 1) # Remove loop control var from stack
+
+    # This case supports ELSE as well
     elif sym == "CASE":
         getsym()
         expression(tx, level)
@@ -688,6 +691,7 @@ def statement(tx, level):
             error(30)
         getsym()
         fixJmp(jump0, codeIndx)
+
     elif sym == "WRITE":
         getsym()
         if sym != ssym["("]:
@@ -702,6 +706,7 @@ def statement(tx, level):
         if sym != ssym[")"]:
             error(22)
         getsym()
+
     elif sym == "WRITELN":
         getsym()
         if sym != ssym["("]:
@@ -717,6 +722,9 @@ def statement(tx, level):
             error(22)
         gen("OPR", 0, 15)
         getsym()
+
+# End statement()
+
 # --------------EXPRESSION--------------------------------------
 def expression(tx, level):
     global sym
@@ -870,13 +878,13 @@ getsym()  # get first symbol
 block(0, 0)  # call block initializing with a table index of zero
 # Note: To ensure all lines from 1 to program end get printed:
 # Comment out line ~495 (the printCode call at the end of def block
-# and uncomment the below:
+# and uncomment the 2 lines below:
 # codeIndx0 = 1
 # printCode()
 if sym != "period":  # period expected after block is completed
     error(9)
-print("\n") # Original code was `print`
 if errorFlag == 0:
     outfile.write("Successful compilation!\n")
 
 Interpret()
+sys.stdout.write("\nInterpretation complete in '" + outfilePath + "'\n")
