@@ -452,7 +452,6 @@ void statement(symbol &sym, int tableinx)
 			getsym(sym);
 			if (sym != ASSIGN)
 				error(ERROR_ASSIGN);
-			// comdition for loop
 			getsym(sym), expression(sym, tableinx);
 			if (sym != TO && sym != DOWNTO)
 				error(TO_OR_DOWNTO_ERROR);
