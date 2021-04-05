@@ -375,50 +375,52 @@ public class compiler {
 		}
 
 		public static void Block(int tx) {
-			if (sym == SYMBOL.CONSTSYM) {
-				GetSym();
-				tx = ConstDeclaration(tx);
-				while (sym == SYMBOL.COMMA) {
-					GetSym();
-					tx = ConstDeclaration(tx);
+			while ( // Declare procedures, consts, and vars
+						 sym == SYMBOL.CONSTSYM
+					|| sym == SYMBOL.VARSYM
+					|| sym == SYMBOL.PROCSYM
+			) {
+				switch (sym){
+					case PROCSYM:
+						GetSym();
+						if (sym == SYMBOL.IDENT) {
+							tx = Enter(OBJECTS.Procedure, tx);
+							GetSym();
+						} else
+							Error(6);
+						if (sym == SYMBOL.SEMICOLON)
+							GetSym();
+						else
+							Error(5);
+
+						Block(tx);
+						if (sym == SYMBOL.SEMICOLON)
+							GetSym();
+						else
+							Error(5);
+						break;
+
+					case CONSTSYM:
+						do {
+							GetSym();
+							tx = ConstDeclaration(tx);
+						} while (sym == SYMBOL.COMMA);
+						if (sym != SYMBOL.SEMICOLON)
+							Error(5);
+						GetSym();
+						break;
+
+					case VARSYM:
+						do {
+							GetSym();
+							tx = VarDeclaration(tx);
+						} while (sym == SYMBOL.COMMA);
+						if (sym != SYMBOL.SEMICOLON)
+							Error(5);
+						GetSym();
+						break;
 				}
-				if (sym == SYMBOL.SEMICOLON)
-					GetSym();
-				else
-					Error(5);
-			}
-
-			if (sym == SYMBOL.VARSYM) {
-				GetSym();
-				tx = VarDeclaration(tx);
-				while (sym == SYMBOL.COMMA) {
-					GetSym();
-					tx = VarDeclaration(tx);
-				}
-				if (sym == SYMBOL.SEMICOLON)
-					GetSym();
-				else
-					Error(5);
-			}
-
-			while (sym == SYMBOL.PROCSYM) {
-				GetSym();
-				if (sym == SYMBOL.IDENT) {
-					tx = Enter(OBJECTS.Procedure, tx);
-					GetSym();
-				} else
-					Error(6);
-				if (sym == SYMBOL.SEMICOLON)
-					GetSym();
-				else
-					Error(5);
-
-				Block(tx);
-				if (sym == SYMBOL.SEMICOLON)
-					GetSym();
-				else
-					Error(5);
-			}
+			} // end while
 			Statement(tx);
 		} // End Block()
 
@@ -469,12 +471,12 @@ public class compiler {
 			} else {
 				Expression(tx);
 				if (
-							 (sym == SYMBOL.EQL)
-						|| (sym == SYMBOL.GTR)
-						|| (sym == SYMBOL.LSS)
-						|| (sym == SYMBOL.NEQ)
-						|| (sym == SYMBOL.LEQ)
-						|| (sym == SYMBOL.GEQ)
+							 sym == SYMBOL.EQL
+						|| sym == SYMBOL.GTR
+						|| sym == SYMBOL.LSS
+						|| sym == SYMBOL.NEQ
+						|| sym == SYMBOL.LEQ
+						|| sym == SYMBOL.GEQ
 				) {
 					GetSym();
 					Expression(tx);
