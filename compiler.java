@@ -4,7 +4,7 @@ import java.io.*;
 public class compiler {
 		static private final int TRUE = 1;
 		static private final int FALSE = 0;
-		static private final int NORW = 19;
+		static private final int NORW = 21;
 		static private final int TXMAX = 100;
 		static private final int NMAX = 14;
 		static private final int AL = 20;
@@ -68,23 +68,25 @@ public class compiler {
 		{
 			 SYMBOL.BEGINSYM
 			,SYMBOL.CALLSYM
-			,SYMBOL.CASESYM  //added case
+			,SYMBOL.CASESYM  // added case
 			,SYMBOL.CENDSYM // added cend
 			,SYMBOL.CONSTSYM
 			,SYMBOL.DOSYM
-		  ,SYMBOL.DOWNTO //added downto
-		  ,SYMBOL.ELSESYM  //added else
+		  ,SYMBOL.DOWNTO // added downto
+		  ,SYMBOL.ELSESYM  // added else
 			,SYMBOL.ENDSYM
-			,SYMBOL.FORSYM //added for
+			,SYMBOL.FORSYM // added for
 			,SYMBOL.IFSYM
 			,SYMBOL.ODDSYM
 			,SYMBOL.PROCSYM
+			,SYMBOL.REPEAT // added repeat
 			,SYMBOL.THENSYM
-			,SYMBOL.TOSYM  //added to
+			,SYMBOL.TOSYM  // added to
+			,SYMBOL.UNTIL // added until
 			,SYMBOL.VARSYM
 			,SYMBOL.WHILESYM
-			,SYMBOL.WRITELNSYM //added writeln
-			,SYMBOL.WRITESYM //added write
+			,SYMBOL.WRITELNSYM // added writeln
+			,SYMBOL.WRITESYM // added write
 		};
 
 		public static class table_struct {
@@ -111,8 +113,10 @@ public class compiler {
 			,"IF"
 			,"ODD"
 			,"PROCEDURE"
+			,"REPEAT" // added repeat
 			,"THEN"
 			,"TO"	// added to
+			,"UNTIL" // added until
 			,"VAR"
 			,"WHILE"
 			,"WRITE" //added write
@@ -133,8 +137,10 @@ public class compiler {
 			,{ 'I', 'F'}
 			,{ 'O', 'D', 'D'}
 			,{ 'P', 'R', 'O', 'C', 'E', 'D', 'U', 'R', 'E'}
+			,{ 'R', 'E', 'P', 'E', 'A', 'T'} // added repeat
 			,{ 'T', 'H', 'E', 'N'}
 			,{ 'T', 'O'}	// added to
+			,{ 'U', 'N', 'T', 'I', 'L'} // added until
 			,{ 'V', 'A', 'R'}
 			,{ 'W', 'H', 'I', 'L', 'E'}
 			,{ 'W', 'R', 'I', 'T', 'E'} //added write
@@ -494,7 +500,6 @@ public class compiler {
 
 		public static void Statement(int tx) {
 			int i;
-      //add statement syms here
 			switch (sym) {
 				case BEGINSYM:
 					GetSym();
