@@ -59,48 +59,48 @@ using namespace std;
 // -------------------------------------------
 typedef enum tag_symbol
 {
-	VARSYM,
+	VARSYM,	// 0
 	CONSTSYM,
 	BEGINSYM,
 	ENDSYM,
 	PERIOD,
-	SEMICOLON,
+	SEMICOLON,	// 5
 	COLON,
 	LPAREN,
 	RPAREN,
 	GRTHEN,
-	LSTHEN,
+	LSTHEN,	// 10
 	GREQL,
 	LSEQL,
 	EQL,
 	ASSIGN,
-	IFSYM,
+	IFSYM,	//15
 	IDENT,
 	NUM,
 	PROCSYM,
 	NOTEQL,
-	MINUS,
+	MINUS,	// 20
 	PLUS,
 	DIV,
 	MULT,
 	COMMA,
-	ODDSYM,
+	ODDSYM,	// 25
 	CALL,
 	THENSYM,
 	WHILESYM,
 	DOSYM,
 	// Added symbols
-	ELSE,
+	ELSE,	// 30
 	REPEAT,
 	UNTIL,
 	FOR,
 	DOWNTO,
-	TO,
+	TO,	// 35
 	WRITE,
 	WRITELN,
 	CASE,
 	OF,
-	CEND
+	CEND	// 40
 }symbol;
 
 // -------------------------------------------
@@ -250,7 +250,7 @@ void error(int num)
 void enter(Objtype kind, char name[], symbol &sym, int &tableinx)
 {
 	tableinx++;
-	strcpy_s(table[tableinx].name, name);
+	strcpy(table[tableinx].name, name);
 	table[tableinx].kind = kind;
 
 	if (kind == CONSTANT)
@@ -282,7 +282,7 @@ int position(int tableinx)
 {
 	int i = tableinx;
 
-	for (strcpy_s(table[0].name, line); strcmp(table[i].name, line) != 0; i--);
+	for (strcpy(table[0].name, line); strcmp(table[i].name, line) != 0; i--);
 
 	return i;
 }
@@ -330,7 +330,7 @@ void block(symbol &sym, int tableinx)
 			getsym(sym);
 			if (sym != IDENT)
 				error(ERROR_IDENT);
-			
+
 			enter(PROCEDURE, line, sym, tableinx);
 			getsym(sym);
 
@@ -433,6 +433,8 @@ void statement(symbol &sym, int tableinx)
 		case REPEAT:
 			do {
 				getsym(sym);
+				if (sym == UNTIL)
+					break;
 				statement(sym, tableinx);
 			}while (sym == SEMICOLON);
 			if (sym != UNTIL) {
@@ -469,7 +471,7 @@ void statement(symbol &sym, int tableinx)
 			if (sym != LPAREN) {
 				error(ERROR_LPAREN);
 			}
-			
+
 			do {
 				getsym(sym), expression(sym, tableinx);
 			} while (sym == COMMA);
@@ -698,7 +700,7 @@ void getsym(symbol &sym)
 		else if (strcmp(line, "REPEAT") == 0)
 			sym = REPEAT;
 		else if (strcmp(line, "UNTIL") == 0)
-			sym == UNTIL;
+			sym = UNTIL;
 		else if (strcmp(line, "FOR") == 0)
 			sym = FOR;
 		else if (strcmp(line, "WRITE") == 0)
@@ -720,7 +722,7 @@ void getsym(symbol &sym)
 		else
 		{
 			sym = IDENT;
-			strcpy_s(symstr[sym], line);
+			strcpy(symstr[sym], line);
 		}
 
 		return;
@@ -739,7 +741,7 @@ void getsym(symbol &sym)
 		} while (chartype(ch) == DIGIT);
 		charcount--;
 		strnum[index] = '\0';
-		strcpy_s(symstr[sym], strnum);
+		strcpy(symstr[sym], strnum);
 
 		return;
 	}
@@ -791,7 +793,7 @@ void getsym(symbol &sym)
 		else if (strcmp(punc, ";") == 0)
 			sym = SEMICOLON;
 
-		strcpy_s(symstr[sym], punc);
+		strcpy(symstr[sym], punc);
 
 		return;
 	}
@@ -837,4 +839,3 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-
