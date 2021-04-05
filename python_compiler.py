@@ -135,7 +135,6 @@ def Interpret():
         if instr.cmd == "LIT":
             top += 1
             if top >= STACKSIZE:
-                print("Line: ", pos)
                 error(34)
             stack[top] = int(instr.value)
         #       OPR COMMAND
