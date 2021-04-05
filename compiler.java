@@ -4,7 +4,7 @@ import java.io.*;
 public class compiler {
 		static private final int TRUE = 1;
 		static private final int FALSE = 0;
-		static private final int NORW = 18;
+		static private final int NORW = 19;
 		static private final int TXMAX = 100;
 		static private final int NMAX = 14;
 		static private final int AL = 20;
@@ -69,6 +69,7 @@ public class compiler {
 			 SYMBOL.BEGINSYM
 			,SYMBOL.CALLSYM
 			,SYMBOL.CASESYM  //added case
+			,SYMBOL.CENDSYM // added cend
 			,SYMBOL.CONSTSYM
 			,SYMBOL.DOSYM
 		  ,SYMBOL.DOWNTO //added downto
@@ -100,6 +101,7 @@ public class compiler {
 			 "BEGIN"
 			,"CALL"
 			,"CASE"	// added case
+			,"CEND" // added cend
 			,"CONST"
 			,"DO"
 			,"DOWNTO"	// added downto
@@ -121,6 +123,7 @@ public class compiler {
 			 {'B', 'E', 'G', 'I', 'N'}
 			,{ 'C', 'A', 'L', 'L'}
 			,{ 'C', 'A', 'S', 'E'} // added case
+			,{ 'C', 'E', 'N', 'D'} // added cend
 			,{ 'C', 'O', 'N', 'S', 'T'}
 			,{ 'D', 'O', }
 			,{ 'D', 'O', 'W', 'N', 'T', 'O'} // added downto
@@ -265,17 +268,11 @@ public class compiler {
 						}
 					}
 				} while (i <= j);
-        // if temp id is printing the same as ID then it found the match
-				// System.out.println("temp_id is ");
-        // System.out.println(temp_id);
 
 				if (i - 1 > j)
 					sym = wsym[k];
 				else
 					sym = SYMBOL.IDENT;
-
-			// System.out.println("\nsym is ");
-			// System.out.println(sym);
 
 			//end of if (A-Z)
 			} else if (ch >= '0' && ch <= '9') {
