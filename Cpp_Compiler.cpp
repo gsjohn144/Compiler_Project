@@ -224,6 +224,7 @@ void error(int num)
 		case ERROR_REL :
 			cout << "Relational operator expected";
 			break;
+		// Added error outpout _____________________________
 		case UNTIL_ERROR:
 			cout << "UNTIL was expected";
 			break;
@@ -239,6 +240,7 @@ void error(int num)
 		case COLON_ERROR:
 			cout << "a colon was expected";
 			break;
+		// -------------------------------------------------
 	}
 	cout << endl;
 	exit(1);
@@ -430,6 +432,7 @@ void statement(symbol &sym, int tableinx)
 				statement(sym, tableinx);
 			}
 			break;
+		// Added keywords and functionality ________________
 		case REPEAT:
 			do {
 				getsym(sym);
@@ -521,6 +524,7 @@ void statement(symbol &sym, int tableinx)
 				error(CEND_ERROR);
 			getsym(sym);
 			break;
+		// ---------------------------------------------------------
 		default:
 			break;
 	}
@@ -695,6 +699,7 @@ void getsym(symbol &sym)
 			sym = WHILESYM;
 		else if (strcmp(line, "DO") == 0)
 			sym = DOSYM;
+		// Added syms __________________________
 		else if (strcmp(line, "ELSE") == 0)
 			sym = ELSE;
 		else if (strcmp(line, "REPEAT") == 0)
@@ -719,6 +724,7 @@ void getsym(symbol &sym)
 			sym = OF;
 		else if (strcmp(line, "CEND") == 0)
 			sym = CEND;
+		// -------------------------------------
 		else
 		{
 			sym = IDENT;
