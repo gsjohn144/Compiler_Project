@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-public class compiler {
+public class java_compiler {
 		static private final int TRUE = 1;
 		static private final int FALSE = 0;
 		static private final int NORW = 21;
